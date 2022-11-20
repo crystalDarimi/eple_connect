@@ -23,16 +23,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors() //기본 cors
                 .and()
                 .csrf()
-                .disable()
+                    .disable() // 사용 안함
                 .httpBasic()
-                .disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .disable()
+                .sessionManagement()//session 기반이 아님을 선언
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
-                .antMatchers("/","/eple/v1/auth/**").permitAll()
-                .anyRequest()
-                .authenticated();
+                .authorizeRequests()//아래 경로는 인등 안 해도 됨
+                    .antMatchers("/","/eple/v1/auth/**").permitAll()
+                .anyRequest()//이외는 전부 인증해야함
+                    .authenticated();
 
         http.addFilterAfter(
                 jwtAuthenticationFilter,
