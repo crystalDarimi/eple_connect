@@ -7,6 +7,7 @@ import com.crystal.eple.dto.response.ResponseDTO;
 import com.crystal.eple.service.LectureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,9 +46,9 @@ public class LectureController {
 
     //생성
     @PostMapping
-    public ResponseEntity<?> createLecture(@RequestBody LectureDTO lectureDTO){
+    public ResponseEntity<?> createLecture(@AuthenticationPrincipal String userId,  @RequestBody LectureDTO lectureDTO){
         try{
-            String temporaryTeacherId = "temp-Teacher"; //임시로 선생님 아이디 생성
+            //String temporaryTeacherId = "temp-Teacher"; //임시로 선생님 아이디 생성
             //(1) toEntity로 변환한다
             LectureEntity entity = LectureDTO.toLectureEntity(lectureDTO);
 
@@ -55,7 +56,7 @@ public class LectureController {
             entity.setTeacherId(null);
 
             //3 임시 유저 아이디 설정 -> 니중에 바꿔줄거임
-            entity.setTeacherId(temporaryTeacherId);
+            entity.setTeacherId(userId);
 
             //4 서비스를 이용해 엔티티 생성
             List<LectureEntity> entities = lectureService.createLecture(entity);
@@ -80,11 +81,11 @@ public class LectureController {
 
     //조회(검색)
     @GetMapping
-    public  ResponseEntity<?> retrieveLectureList(){
-        String temporaryTeacherId = "temp-Teacher"; //임시로 선생님 아이디 생성
+    public  ResponseEntity<?> retrieveLectureList(@AuthenticationPrincipal String userId){
+        //String temporaryTeacherId = "temp-Teacher"; //임시로 선생님 아이디 생성
 
         //(1) 서비스 메서드의 retrive 메서드를 이용해 리스트를 가져옴
-        List<LectureEntity> entities1 = lectureService.retrieveLecture(temporaryTeacherId);
+        List<LectureEntity> entities1 = lectureService.retrieveLecture(userId);
 
         //(2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 LectureDTO로 변환
         List<LectureDTO> dtos1 = entities1.stream().map(LectureDTO::new).collect(Collectors.toList());
@@ -97,14 +98,14 @@ public class LectureController {
 
     //수정
     @PutMapping
-    public ResponseEntity<?> updateLecture (@RequestBody LectureDTO dto){
-            String temporaryUserId = "temp-Teacher"; // temporary user id.
+    public ResponseEntity<?> updateLecture (@AuthenticationPrincipal String userId,@RequestBody LectureDTO dto){
+           // String temporaryUserId = "temp-Teacher"; // temporary user id.
 
             // (1) dto를 entity로 변환한다.
             LectureEntity entity = LectureDTO.toLectureEntity(dto);
 
             // (2) id를 temporaryUserId로 초기화 한다. 나중에 수정 예정
-            entity.setTeacherId(temporaryUserId);
+            entity.setTeacherId(userId);
 
             // (3) 서비스를 이용해 entity를 업데이트 한다.
             List<LectureEntity> entities = lectureService.updateLecture(entity);
@@ -121,11 +122,11 @@ public class LectureController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteLecture(@RequestBody LectureDTO dto){
+    public ResponseEntity<?> deleteLecture(@AuthenticationPrincipal String userId,@RequestBody LectureDTO dto){
         try {
-            String temporaryUserId = "temp-Teacher";
+           // String temporaryUserId = "temp-Teacher";
             LectureEntity entity = LectureDTO.toLectureEntity(dto);
-            entity.setTeacherId(temporaryUserId);
+            entity.setTeacherId(userId);
 
             //서비스를 사용해서 삭제
             List<LectureEntity> entities = lectureService.delete(entity);
