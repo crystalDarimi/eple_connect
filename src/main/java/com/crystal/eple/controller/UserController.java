@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Slf4j
@@ -25,15 +27,19 @@ public class UserController {
     @Autowired
     private TokenProvider tokenProvider;
 
+    //Bean으로 작성해도 ok
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody UserDTO userDTO){
         try{
             if(userDTO == null || userDTO.getPassword()==null){
                 throw new RuntimeException("Invelid Password value");
             }
+            //요청을 이용해 저장할 유저 만들기
             UserEntity user = UserEntity.builder()
                     .username(userDTO.getUsername())
-                    .password(userDTO.getPassword())
+                    .password(passwordEncoder.encode(userDTO.getPassword()))
                     .build();
 
             //서비스를 이용해 리포지토리에 유저 저장
@@ -54,7 +60,7 @@ public class UserController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticate(@RequestBody UserDTO userDTO){
         UserEntity user = userService.getByCredentials(
-                userDTO.getUsername(),userDTO.getPassword());
+                userDTO.getUsername(),userDTO.getPassword(),passwordEncoder);
         if(user !=null){
             //토큰 생성
             final String token = tokenProvider.create(user);
