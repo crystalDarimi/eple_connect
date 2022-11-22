@@ -5,6 +5,8 @@ import {Container,List, Paper} from "@mui/material";
 import AddLecture from "./AddLecture.js"
 import {call} from "./service/ApiService";
 import {useEffect} from "react"
+import Sidebar from "./components/Sidebar";
+import Header from "./components/Header";
 
 /*
 function App(){
@@ -163,6 +165,7 @@ class App extends React.Component {
 
 const App = () => {
     const [state, setState] = useState({ items: []});
+    
 
     // componentDidMount 대신 userEffect 사용
     useEffect(() => {
@@ -217,10 +220,14 @@ const App = () => {
     // 3. props로 넘겨주기
     return (
         <div className="App">
-            <Container maxWidth="md">
-                <AddLecture addItem={addItem} />
-                <div className="LectureList">{lectureItems}</div>
-            </Container>
+            <Header />
+                <Sidebar>
+                    <Container maxWidth="md">
+                     <AddLecture addItem={addItem} />
+                        <div className="LectureList">{lectureItems}</div>
+                    </Container>
+                </Sidebar>
+
         </div>
     );
 }
