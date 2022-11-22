@@ -86,4 +86,14 @@ export function call  (api, method, request) {
     });
 }
 
+export function signin(userDTO){
+    return call("/eple/v1/auth/signin","POST",userDTO)
+        .then((response)=>{
+            if(response.token){
+                //token이 존재하는 경우 lecture 화면으로 redirect
+                window.location.href="/";
+            }
+        });
+}
+
 
