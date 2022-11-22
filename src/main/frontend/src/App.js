@@ -172,11 +172,14 @@ const App = () => {
     }, []);
 
     const addItem = (item) => {
+
         const thisItems = state.items;
         item.id = "ID-" + thisItems.length; // key를 위한 id추가
         thisItems.push(item); // 배열에 아이템 추가
         setState({ items: thisItems }); // 업데이트는 반드시 this.setState로 해야됨.
         console.log("items : ", state.items);
+
+
 
         call("/eple/v1/mystudent/lecture", "POST", item).then((response) =>
             setState({ items: response.data })
