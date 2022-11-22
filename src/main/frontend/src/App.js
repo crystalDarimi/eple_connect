@@ -164,24 +164,23 @@ class App extends React.Component {
 
 
 const App = () => {
-    const [state, setState] = useState({ items: []});
-    
+    const [state, setState] = useState({ items: [],loading:true});
+    //const [loading, setLoading] = useState(true);
+
 
     // componentDidMount 대신 userEffect 사용
     useEffect(() => {
         call("/eple/v1/mystudent/lecture", "GET", null).then((response) =>
-            setState({ items: response.data })
-        );
+                setState({items: response.data, loading: false})
+            );
     }, []);
 
     const addItem = (item) => {
-
         const thisItems = state.items;
         item.id = "ID-" + thisItems.length; // key를 위한 id추가
         thisItems.push(item); // 배열에 아이템 추가
         setState({ items: thisItems }); // 업데이트는 반드시 this.setState로 해야됨.
         console.log("items : ", state.items);
-
 
 
         call("/eple/v1/mystudent/lecture", "POST", item).then((response) =>
@@ -202,7 +201,8 @@ const App = () => {
     };
 
 
-    var lectureItems = state.items.length > 0 && (
+
+    let lectureItems = state.items.length > 0 && (
         <Paper style={{ margin: 16 }}>
             <List>
                 {state.items.map((item, idx) => (
@@ -217,20 +217,30 @@ const App = () => {
         </Paper>
     );
 
-    // 3. props로 넘겨주기
-    return (
-        <div className="App">
+    //로딩중이 아닐 때 렌더링할 부분
+    let lectureListPage = (
+        <div>
             <Header />
-                <Sidebar>
-                    <Container maxWidth="md">
-                     <AddLecture addItem={addItem} />
-                        <div className="LectureList">{lectureItems}</div>
-                    </Container>
-                </Sidebar>
-
+            <Sidebar>
+                <Container maxWidth="md">
+                    <AddLecture addItem={addItem} />
+                    <div className="LectureList">{lectureItems}</div>
+                </Container>
+            </Sidebar>
         </div>
     );
-}
+
+    let loadingPage = <h1> 로딩중..</h1>;
+    let content = loadingPage;
+    if(!state.loading){
+        //로딩중이 아니면 lecture page
+        content = lectureListPage;
+    }
+
+    // 3. props로 넘겨주기
+    return <div className="App">{lectureListPage}</div>;
+
+};
 
 export default App;
 
