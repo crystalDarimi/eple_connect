@@ -10,27 +10,29 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class UserServiceInple implements UserService{
+public class UserServiceImple implements UserService{
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public UserEntity createUser(UserEntity userEntity) {
-        if(userEntity == null || userEntity.getUsername()==null){
-            throw  new RuntimeException("Invalid argument");
+        if(userEntity == null || userEntity.getEmail() == null ) {
+            throw new RuntimeException("Invalid arguments");
         }
-        final String username = userEntity.getUsername();
-        if(userRepository.existsByUsername(username)){
-            log.warn("Username already exist {}",username);
-            throw new RuntimeException("Username already exist");
+        final String email = userEntity.getEmail();
+        if(userRepository.existsByEmail(email)) {
+            log.warn("Email already exists {}", email);
+            throw new RuntimeException("Email already exists");
         }
+
         return userRepository.save(userEntity);
     }
 
+
     @Override
-    public UserEntity getByCredentials(final String username, final String password, final PasswordEncoder encoder) {
-        final UserEntity originalUser = userRepository.findByUsername(username);
+    public UserEntity getByCredentials(final String email, final String password, final PasswordEncoder encoder) {
+        final UserEntity originalUser = userRepository.findByEmail(email);
 
         //mathes 메서드를 이용해 패스워드가 같은지 확인
         if(originalUser != null && encoder.matches(password,originalUser.getPassword())){

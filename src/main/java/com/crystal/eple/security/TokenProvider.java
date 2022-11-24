@@ -20,7 +20,7 @@ public class TokenProvider {
     private static final String SECRET_KEY = "NMA8JPctFuna59f5";
     public String create(UserEntity userEntity) { //JWT 라이브러리를 이용해 JWT 토큰 생성 (임의로 지정한 시크릿키 사용)
         Date expiryDate = Date.from( //기한은 1일 뒤로 설정
-                Instant.now().plus(1, ChronoUnit.DAYS));
+                Instant.now().plus(7, ChronoUnit.DAYS));
 
         	/*
 		{ // header

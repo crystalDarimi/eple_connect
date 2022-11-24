@@ -8,11 +8,12 @@ function Login(){
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.target);
-        const username = data.get("username");
+        //const username = data.get("username");
+        const email = data.get("email");
         const password = data.get("password");
 
         //apiService의 signin 메서드를 사용해 로그인
-        signin({username:username , password:password});
+        signin({ email: email, password: password });
     };
 
     return(
@@ -33,10 +34,10 @@ function Login(){
                             variant="outlined"
                             required
                             fullWidth
-                            id ="username"
-                            label="아이디"
-                            name="username"
-                            autoComplete="username"
+                            id="email"
+                            label="이메일 주소"
+                            name="email"
+                            autoComplete="email"
                         />
                     </Grid>
                     <Grid item xs = {12}>
@@ -44,23 +45,27 @@ function Login(){
                             variant="outlined"
                             required
                             fullWidth
-                            label="패스워드"
                             name="password"
+                            label="패스워드"
                             type="password"
                             id="password"
                             autoComplete="current-password"
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <Button type = "submit" fullWidth variant = "contained" color= "primary">
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                        >
                             로그인
                         </Button>
                     </Grid>
                 </Grid>
             </form>
-
         </Container>
     );
-};
+}
 
 export default Login;

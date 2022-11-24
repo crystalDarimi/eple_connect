@@ -2,7 +2,6 @@ import {API_BASE_URL}  from "../api-config";
 const ACCESS_TOKEN = "ACCESS_TOKEN";
 
 
-
  /*
 
 export const call = (api, method, request) =>{
@@ -81,13 +80,53 @@ export function call  (api, method, request) {
         options.body = JSON.stringify(request);
     }
     return fetch(options.url, options)
+        .then((response) => (
+            response.json().then((json) => {
+
+                if (!response.ok) {
+                    return Promise.reject(json);
+                }
+
+                return json;
+            })
+        ))
+        .catch((error) => {
+
+            if (403 === error.status) {
+                window.location.href = "/login";
+            }
+
+            return Promise.reject(error);
+        });
+}
+
+export const signin = (userDTO) => {
+    return call("/eple/v1/auth/signin","POST",userDTO)
+        .then((response)=>{
+            if(response.token){
+                //로컬 스토리지에 토큰 저장
+                localStorage.setItem(ACCESS_TOKEN,response.token);
+
+                //token이 존재하는 경우 lecture 화면으로 redirect
+                window.location.href = "/";
+            }
+        });
+}
+
+export const signout = () => {
+    localStorage.setItem(ACCESS_TOKEN, null);
+    window.location.href = "/login";
+}
+
+/*
+return fetch(options.url, options)
         .then((response) =>
             response.json().then((json) => {
                 if (!response.ok) {
                     // response.ok가 true이면 정상적인 리스폰스를 받은것, 아니면 에러 리스폰스를 받은것.
-                    return Promise.reject(json);
+                    return Promise.reject(response);
                 }
-                return json;
+                return request.json();
             })
         )
         .catch((error) => {
@@ -95,26 +134,7 @@ export function call  (api, method, request) {
             console.log(error.status);
             if (error.status === 403) {
                 window.location.href = "/login"; // redirect
-            }
+            }else{}
             return Promise.reject(error);
         });
-}
-
-export function signin(userDTO){
-    return call("/eple/v1/auth/signin","POST",userDTO)
-        .then((response)=>{
-            if(response.token){
-                //로컬 스토리지에 토큰 저장
-                localStorage.setItem("ACCESS_TOKEN",response.token);
-
-                //token이 존재하는 경우 lecture 화면으로 redirect
-                window.location.href="/";
-            }
-        });
-}
-
-export function signout(){
-    localStorage.setItem("ACCESS_TOKEN",null);
-    window.location.href("/login");
-}
-
+ */

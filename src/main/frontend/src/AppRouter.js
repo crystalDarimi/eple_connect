@@ -20,8 +20,7 @@ function AppRouter(){
         <div>
             <BrowserRouter>
                 <Routes>
-
-                    <Route path ="/" element = {<App />}/>
+                    <Route path ="/eple/v1/mystudent/lecture" element = {<App />}/>
                     <Route path ="/login" element = {<Login />}/>
                 </Routes>
             </BrowserRouter>

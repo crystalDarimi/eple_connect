@@ -1,10 +1,9 @@
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Lecture from "./Lecture";
-import {Container,List, Paper} from "@mui/material";
+import {Container, List, Paper} from "@mui/material";
 import AddLecture from "./AddLecture.js"
 import {call} from "./service/ApiService";
-import {useEffect} from "react"
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 
@@ -163,14 +162,14 @@ class App extends React.Component {
 
 
 const App = () => {
-    const [state, setState] = useState({ items: [],loading:true});
+    const [state, setState] = useState({ items: []});
     //const [loading, setLoading] = useState(true);
 
 
     // componentDidMount 대신 userEffect 사용
     useEffect(() => {
         call("/eple/v1/mystudent/lecture", "GET", null).then((response) =>
-                setState({items: response.data, loading: false})
+                setState({items: response.data})
             );
     }, []);
 
@@ -204,7 +203,7 @@ const App = () => {
 
 
 
-    let lectureItems = state.items.length > 0 && (
+    var lectureItems = state.items.length > 0 && (
         <Paper style={{ margin: 16 }}>
             <List>
                 {state.items.map((item, idx) => (
