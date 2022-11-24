@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Delius+Unicase&display=swap');
+
+header {
+    height: 90px;
+    border-bottom: 1px solid;
+    border-width: auto;
+    border-color: #EEEEEE;
+}
+
+nav ul li {
+    color: #a2a3a5;
+    float: right;
+    list-style: none;
+    margin-top: 30px;
+
+}
+.Notification{
+    margin-right: 50px;
+
+}
+.Profile{
+    margin-right: 20px;
+}

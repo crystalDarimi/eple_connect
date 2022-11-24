@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()//아래 경로는 인등 안 해도 됨
-                    .antMatchers("/","/eple/v1/auth/**").permitAll()
+                    .antMatchers("/","/eple/v1/auth/**","/error").permitAll()
                 .anyRequest()//이외는 전부 인증해야함
                     .authenticated();
 

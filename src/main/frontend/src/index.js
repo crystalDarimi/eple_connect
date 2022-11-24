@@ -4,11 +4,17 @@ import App from './App.js';
 import reportWebVitals from './reportWebVitals';
 import AppRouter  from "./AppRouter";
 import {createRoot} from "react-dom/client";
+import {BrowserRouter} from "react-router-dom";
+
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 
-root.render(<AppRouter tab="home" />);
+root.render(<AppRouter>
+    <React.StrictMode>
+        <App/>
+    </React.StrictMode>
+</AppRouter>);
 
 /*const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

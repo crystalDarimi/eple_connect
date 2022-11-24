@@ -26,22 +26,7 @@ public class LectureController {
         this.lectureService = lectureService;
     }
 
-/*
-    @GetMapping("/test")
-    public ResponseEntity<?> testLecture() {
-        String str = lectureService.testLecture(); // 테스트 서비스 사용
-        List<String> list = new ArrayList<>();
-        list.add(str);
-        ResponseDTO<String> response = ResponseDTO.<String>builder().data(list).build();
-        // ResponseEntity.ok(response) 를 사용해도 상관 없음
-        return ResponseEntity.ok().body(response);
-    }
 
-    @GetMapping("/new")
-    public String createForm(){return "mystudent/createLectureForm";}
-
-
- */
 
 
     //생성
@@ -68,7 +53,7 @@ public class LectureController {
             ResponseDTO<LectureDTO> response = ResponseDTO.<LectureDTO>builder().data(dtos).build();
 
             //7 responseDTO 리턴
-            return ResponseEntity.ok().body(response);
+            return ResponseEntity.ok(response);
 
         } catch (Exception e){
             //8 혹시 예외가 나는 경우 dto 대신 메세지 넣어서 리턴

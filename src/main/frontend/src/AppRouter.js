@@ -14,14 +14,13 @@ function Copyright(){
         </Typography>
     );
 }
-
-function AppRouter(){
+const AppRouter=() =>{
     return(
         <div>
             <BrowserRouter>
                 <Routes>
-                    <Route path ="/" element = {<App />}/>
-                     <Route path ="/login" element = {<Login />}/>
+                    <Route path ="/login" element = {<Login/>}/>
+                    <Route path ="/" element = {<App /> }/>
                 </Routes>
             </BrowserRouter>
             <Box mt ={5}>
