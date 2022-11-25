@@ -63,6 +63,11 @@ export const signout = () => {
     window.location.href = "/login";
 }
 
+export const signup = (userDTO) => {
+    return call("/eple/v1/auth/signup","POST",userDTO);
+}
+
+
 /*
 return fetch(options.url, options)
         .then((response) =>

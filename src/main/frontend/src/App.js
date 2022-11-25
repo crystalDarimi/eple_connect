@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import Lecture from "./Lecture";
+import Lecture from "./page/Lecture";
 import {Container, List, Paper} from "@mui/material";
-import AddLecture from "./AddLecture.js"
+import AddLecture from "./page/AddLecture.js"
 import {call,signout} from "./service/ApiService";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
