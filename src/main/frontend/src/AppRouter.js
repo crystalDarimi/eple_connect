@@ -5,6 +5,7 @@ import Login from "./page/Login";
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 import {Typography, Box} from "@mui/material";
 import Signup from "./page/Signup";
+import Calendar from "./page/Calendar";
 
 function Copyright(){
     return(
@@ -23,6 +24,7 @@ const AppRouter=() =>{
                     <Route path ="/login" element = {<Login/>}/>
                     <Route path ="/" element = {<App /> }/>
                     <Route path = "/signup" element = {<Signup/> }/>
+                    <Route path="/calendar" element={<Calendar/>}/>
                 </Routes>
             </BrowserRouter>
             <Box mt ={5}>
