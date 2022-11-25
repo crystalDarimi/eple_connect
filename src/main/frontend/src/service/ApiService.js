@@ -2,62 +2,7 @@ import {API_BASE_URL}  from "../api-config";
 const ACCESS_TOKEN = "ACCESS_TOKEN";
 
 
- /*
 
-export const call = (api, method, request) =>{
-    let options = {
-        headers: new Headers({
-            "Content-Type": "application/json",
-        }),
-        url: API_BASE_URL + api,
-        method: method,
-    };
-    if (request) {
-        // GET method
-        options.body = JSON.stringify(request);
-    }
-    return fetch(options.url, options).then((response) =>
-        response.json().then((json) => {
-            if (!response.ok) {
-                // response.ok가 true이면 정상적인 리스폰스를 받은것, 아니면 에러 리스폰스를 받은것.
-                return Promise.reject(json);
-            }
-            return json;
-        })
-    );
-}
-
-
-
-export function call(api,method,request)  {
-    let options = {
-        headers:new Headers({
-            "Content-Type":"application/json",
-        }),
-        url: API_BASE_URL + api,
-        method: method,
-    };
-
-    if(request){
-        //GET 메서드
-        options.body = JSON.stringify(request);
-    }
-    return fetch(options.url, options).then((response) =>
-        response.json().then((json) => {
-            if (!response.ok) {
-                // response.ok가 true이면 정상적인 리스폰스를 받은것, 아니면 에러 리스폰스를 받은것.
-                return Promise.reject(json);
-            }
-            return json;
-        })
-    );
-
-}
-
-
-
-
-  */
 
 export const call =  (api, method, request) => {
     let headers = new Headers({
@@ -118,6 +63,11 @@ export const signout = () => {
     window.location.href = "/login";
 }
 
+export const signup = (userDTO) => {
+    return call("/eple/v1/auth/signup","POST",userDTO);
+}
+
+
 /*
 return fetch(options.url, options)
         .then((response) =>
@@ -137,4 +87,60 @@ return fetch(options.url, options)
             }else{}
             return Promise.reject(error);
         });
+ */
+/*
+
+export const call = (api, method, request) =>{
+   let options = {
+       headers: new Headers({
+           "Content-Type": "application/json",
+       }),
+       url: API_BASE_URL + api,
+       method: method,
+   };
+   if (request) {
+       // GET method
+       options.body = JSON.stringify(request);
+   }
+   return fetch(options.url, options).then((response) =>
+       response.json().then((json) => {
+           if (!response.ok) {
+               // response.ok가 true이면 정상적인 리스폰스를 받은것, 아니면 에러 리스폰스를 받은것.
+               return Promise.reject(json);
+           }
+           return json;
+       })
+   );
+}
+
+
+
+export function call(api,method,request)  {
+   let options = {
+       headers:new Headers({
+           "Content-Type":"application/json",
+       }),
+       url: API_BASE_URL + api,
+       method: method,
+   };
+
+   if(request){
+       //GET 메서드
+       options.body = JSON.stringify(request);
+   }
+   return fetch(options.url, options).then((response) =>
+       response.json().then((json) => {
+           if (!response.ok) {
+               // response.ok가 true이면 정상적인 리스폰스를 받은것, 아니면 에러 리스폰스를 받은것.
+               return Promise.reject(json);
+           }
+           return json;
+       })
+   );
+
+}
+
+
+
+
  */

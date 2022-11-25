@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import Lecture from "./Lecture";
+import Lecture from "./page/Lecture";
 import {Container, List, Paper} from "@mui/material";
-import AddLecture from "./AddLecture.js"
+import AddLecture from "./page/AddLecture.js"
 import {call,signout} from "./service/ApiService";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
@@ -13,14 +13,15 @@ import Header from "./components/Header";
 
 const App = () => {
     const [state, setState] = useState({ items: []});
-    //const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
 
     // componentDidMount 대신 userEffect 사용
     useEffect(() => {
-        call("/eple/v1/mystudent/lecture", "GET", null).then((response) =>
-                setState({items: response.data})
-            );
+        call("/eple/v1/mystudent/lecture", "GET", null).then((response) =>{
+                setState({items: response.data});
+                setLoading(false);
+        });
     }, []);
 
     const addItem = (item) => {
@@ -83,20 +84,13 @@ const App = () => {
 
     let loadingPage = <h1> 로딩중..</h1>;
     let content = loadingPage;
-    if(!state.loading){
+    if(!loading){
         //로딩중이 아니면 lecture page
         content = lectureListPage;
     }
 
     // 3. props로 넘겨주기
-    return <div className="App">
-        <Header />
-        <Sidebar>
-            <Container maxWidth="md">
-                <AddLecture addItem={addItem} />
-                <div className="LectureList">{lectureItems}</div>
-            </Container>
-        </Sidebar>
+    return <div className="App"> {content}
     </div>
 
 };
