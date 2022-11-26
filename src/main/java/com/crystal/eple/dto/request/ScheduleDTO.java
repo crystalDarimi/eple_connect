@@ -6,6 +6,7 @@ import com.crystal.eple.domain.entity.ScheduleEntity;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @AllArgsConstructor
@@ -25,11 +26,17 @@ public class ScheduleDTO {
 
     private LectureEntity lectureEntity;
 
+    private LocalDateTime start;
+
+    private LocalDateTime end;
+
+
+
     public ScheduleDTO(final ScheduleEntity scheduleEntity){
        this.scheduleId = scheduleEntity.getScheduleId();
        this.date= scheduleEntity.getDate();
-       this.startTime = scheduleEntity.getStartTime();
-       this.endTime = scheduleEntity.getEndTime();
+       this.start = scheduleEntity.getStart();
+       this.end = scheduleEntity.getEnd();
        this.lectureEntity = scheduleEntity.getLectureEntity();
     }
 
@@ -37,8 +44,8 @@ public class ScheduleDTO {
         return ScheduleEntity.builder()
                 .scheduleId(scheduleDTO.getScheduleId())
                 .date(scheduleDTO.getDate())
-                .startTime(scheduleDTO.getStartTime())
-                .endTime(scheduleDTO.getEndTime())
+                .start(scheduleDTO.getStart())
+                .end(scheduleDTO.getEnd())
                 .lectureEntity(scheduleDTO.getLectureEntity())
                 .build();
     }
