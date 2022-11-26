@@ -69,6 +69,7 @@ const AddLecture = (props) =>{
     const addItem = props.addItem;
 
 
+
     //onInputChange 함수
     const onInputChange = (e) =>{
         const thisItem = state.item;

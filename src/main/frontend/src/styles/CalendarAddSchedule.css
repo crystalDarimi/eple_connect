@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Delius+Unicase&display=swap');
+
+.ReactModal__Overlay{
+    z-index: 10;
+    background-color: rgba(75, 75, 75, 0.173) !important;
+}
+.ReactModal__Content{
+    display: inline-block;
+    background-color: rgb(254, 254, 254);
+    border-radius: 20px;
+    height: 500px;
+    width: 400px;
+    box-shadow: 20px 20px 20px 20px rgba(185, 185, 185, 0.393);
+    margin-top: 10%;
+    margin-left: 35%;
+}
+.addEvntForm{
+    margin-top: 15%;
+    margin-left: 22.5%;
+}
+.addEvntFormInsider{
+    position: relative;
+    height: 400px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.text{
+    font-family: 'Poppins';
+    font-size: 20px;
+    font-weight: 500;
+    color: rgb(74, 74, 74);
+    text-decoration: underline 2px;
+    text-underline-position: under;
+    text-decoration-color: gray;
+}
+.UserInput{
+    margin-top: 10px;
+}
+.closeBtn {
+    z-index: 1;
+    width: 95px;
+    height: 45px;
+    display: flex;
+    border: none;
+    border-radius: 20px;
+    background-color: #00A8C6;
+    color: #FFFFFF;
+    box-shadow: 0px 0px 10px rgb(167, 166, 166);
+    justify-content: center;
+    align-items: center;
+}
+
+.closeBtn:hover {
+    background-color: #00A8C6;
+}
+
+.closeBtn:active {
+    background-color: #00A8C6;
+    box-shadow: 0px 0px 3px rgb(167, 166, 166);
+}
+
+
+
+
+/* .addEvntBase {
+    position: absolute;
+    display: inline-block;
+    background-color: rgb(255, 255, 255);
+    font-family: 'Poppins';
+    border-radius: 20px;
+    top: 20%;
+    left: 20%;
+    box-shadow: 20px 20px 20px 20px rgba(185, 185, 185, 0.393);
+}
+.addEventFormInsider{
+    margin: 50px 50px 50px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+}
+
+.addEvntForm {
+    z-index: 100;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    box-shadow: rgba(84, 83, 83, 0.826);
+}
+
+
+.closeBtn {
+    background-color: rgb(193, 193, 193);
+    border: none;
+    margin-top: 10px;
+    border-radius: 10px;
+    height: 50px;
+}
+.StartDate{
+    height: 50px;
+}
+.EndDate{
+    height: 50px;
+} */
