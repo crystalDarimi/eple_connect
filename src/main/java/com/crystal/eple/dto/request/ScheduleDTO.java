@@ -3,6 +3,7 @@ package com.crystal.eple.dto.request;
 
 import com.crystal.eple.domain.entity.LectureEntity;
 import com.crystal.eple.domain.entity.ScheduleEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -20,15 +21,15 @@ public class ScheduleDTO {
 
     private LocalDate date;
 
-   private LocalTime startTime;
-
-    private LocalTime  endTime;
-
     private LectureEntity lectureEntity;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime start;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime end;
+
+    private String lectureTitle;
 
 
 
