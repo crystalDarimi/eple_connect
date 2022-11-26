@@ -4,8 +4,7 @@ import Lecture from "./page/Lecture";
 import {Container, List, Paper} from "@mui/material";
 import AddLecture from "./page/AddLecture.js"
 import {call,signout} from "./service/ApiService";
-import Sidebar from "./components/Sidebar";
-import Header from "./components/Header";
+import Loading from "./page/Loading";
 
 
 
@@ -20,6 +19,7 @@ const App = () => {
     useEffect(() => {
         call("/eple/v1/mystudent/lecture", "GET", null).then((response) =>{
                 setState({items: response.data});
+
                 setLoading(false);
         });
     }, []);
@@ -72,13 +72,10 @@ const App = () => {
     //로딩중이 아닐 때 렌더링할 부분
     let lectureListPage = (
         <div>
-            <Header />
-            <Sidebar>
                 <Container maxWidth="md">
                     <AddLecture addItem={addItem} />
                     <div className="LectureList">{lectureItems}</div>
                 </Container>
-            </Sidebar>
         </div>
     );
 
