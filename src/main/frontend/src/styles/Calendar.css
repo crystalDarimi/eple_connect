@@ -1,0 +1,5 @@
+/* Calendar.css  */
+
+/* 주말 날짜 토요일 파랑 , 일요일 빨강 */
+.fc-day-sun a { color: red }
+.fc-day-sat a {color: blue }
