@@ -18,6 +18,10 @@ repositories {
 	mavenCentral()
 }
 
+bootRun {
+	String activeProfile = System.properties['spring.profiles.active']
+	systemProperty "spring.profiles.active", activeProfile
+}
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -28,6 +32,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
+
 
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
@@ -48,7 +53,7 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-def frontendDir = "$projectDir/src/main/frontend"
+def frontendDir = "$projectDir/../frontend"
 
 sourceSets {
 	main {
@@ -87,4 +92,24 @@ task copyReactBuildFiles(type: Copy) {
 	dependsOn "buildReact"
 	from "$frontendDir/build"
 	into "$projectDir/src/main/resources/static"
+}
+
+task('release') {
+	dependsOn("build")
+
+	doLast {
+		def stdout = new ByteArrayOutputStream()
+		exec {
+			commandLine 'eb', 'setenv', 'SPRING_PROFILES_ACTIVE=prod'
+			standardOutput = stdout;
+		}
+
+		println "eb setenv SPRING_PROFILES_ACTIVE=prod :\n$stdout";
+		exec {
+			commandLine 'eb', 'deploy'
+			standardOutput = stdout
+		}
+		println "en deploy :\n$stdout";
+		println "Release succeeded."
+	}
 }
