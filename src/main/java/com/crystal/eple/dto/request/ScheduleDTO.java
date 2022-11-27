@@ -3,9 +3,11 @@ package com.crystal.eple.dto.request;
 
 import com.crystal.eple.domain.entity.LectureEntity;
 import com.crystal.eple.domain.entity.ScheduleEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @AllArgsConstructor
@@ -19,17 +21,23 @@ public class ScheduleDTO {
 
     private LocalDate date;
 
-   private LocalTime startTime;
-
-    private LocalTime  endTime;
-
     private LectureEntity lectureEntity;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime start;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime end;
+
+    private String lectureTitle;
+
+
 
     public ScheduleDTO(final ScheduleEntity scheduleEntity){
        this.scheduleId = scheduleEntity.getScheduleId();
        this.date= scheduleEntity.getDate();
-       this.startTime = scheduleEntity.getStartTime();
-       this.endTime = scheduleEntity.getEndTime();
+       this.start = scheduleEntity.getStart();
+       this.end = scheduleEntity.getEnd();
        this.lectureEntity = scheduleEntity.getLectureEntity();
     }
 
@@ -37,8 +45,8 @@ public class ScheduleDTO {
         return ScheduleEntity.builder()
                 .scheduleId(scheduleDTO.getScheduleId())
                 .date(scheduleDTO.getDate())
-                .startTime(scheduleDTO.getStartTime())
-                .endTime(scheduleDTO.getEndTime())
+                .start(scheduleDTO.getStart())
+                .end(scheduleDTO.getEnd())
                 .lectureEntity(scheduleDTO.getLectureEntity())
                 .build();
     }

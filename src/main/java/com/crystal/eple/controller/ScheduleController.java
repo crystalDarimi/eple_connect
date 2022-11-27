@@ -2,6 +2,7 @@ package com.crystal.eple.controller;
 
 import com.crystal.eple.domain.entity.LectureEntity;
 import com.crystal.eple.domain.entity.ScheduleEntity;
+import com.crystal.eple.dto.request.LectureDTO;
 import com.crystal.eple.dto.request.ScheduleDTO;
 import com.crystal.eple.dto.response.ResponseDTO;
 import com.crystal.eple.service.LectureService;
@@ -33,16 +34,10 @@ public class ScheduleController {
     public ResponseEntity<?> createSchedule(@RequestBody ScheduleDTO scheduleDTO){
         try{
 
-            String temporaryLectureTitle = "나수정 영어";
             ScheduleEntity scheduleEntity = ScheduleDTO.toScheduleEntity(scheduleDTO);
             scheduleEntity.setLectureEntity(null);
 
-           List<ScheduleEntity> entities = scheduleService.createSchedule(scheduleEntity,temporaryLectureTitle);
-
-
-            //ModelMapper modelMapper = new ModelMapper();
-           // ScheduleDTO dto = modelMapper.map(getEntitiy,ScheduleDTO.class);
-
+           List<ScheduleEntity> entities = scheduleService.createSchedule(scheduleEntity,scheduleDTO.getLectureTitle());
 
 
             List<ScheduleDTO> dtos = entities.stream().map(ScheduleDTO::new).collect(Collectors.toList());
