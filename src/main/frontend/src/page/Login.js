@@ -1,76 +1,95 @@
-import React, { useState } from "react";
 import {Link, Container, Grid, Typography, TextField, Button} from "@mui/material";
 import {signin} from "../service/ApiService";
+import React, {Component, useEffect} from 'react'
+import '../styles/Login.css';
+import { GOOGLE_AUTH_URL, ACCESS_TOKEN } from '../constants';
+import { login } from '../util/APIUtils';
+import { Navigate } from 'react-router-dom'
+import Alert from 'react-s-alert';
+import googleLogo from '../google-logo.png';
 
 
+class Login extends Component {
 
-function Login(){
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.target);
-        //const username = data.get("username");
-        const email = data.get("email");
-        const password = data.get("password");
+    render() {
+        if(this.props.authenticated) {
+                    return <Navigate
+                        to={{
+                        pathname: "/",
+                        state: { from: this.props.location }
+                    }}/>;
+        }
 
-        //apiService의 signin 메서드를 사용해 로그인
-        signin({ email: email, password: password });
-    };
-
-    return(
-        <Container component= "main" maxWidth= "xs" style={{marginTop:"8%"}}>
-            <Grid container spacing={2}>
-                <Grid item xs = {12}>
-                    <Typography component= "h1" variant="h5">
-                        로그인
-                    </Typography>
-                </Grid>
-            </Grid>
-            <form noValidate onSubmit={handleSubmit}>
-                {" "}
-                { /* subit 버튼을 누르면 handlesubmit이 실행됨 */}
-                <Grid container spacing={2}>
-                    <Grid item xs = {12}>
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            id="email"
-                            label="이메일 주소"
-                            name="email"
-                            autoComplete="email"
-                        />
-                    </Grid>
-                    <Grid item xs = {12}>
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            name="password"
-                            label="패스워드"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                        >
-                            로그인
-                        </Button>
-                    </Grid>
-                    <Grid item>
-                        <Link href="/signup" variant="body2">
-                            <Grid item>계정이 없습니까? 여기서 가입 하세요.</Grid>
-                        </Link>
-                    </Grid>
-                </Grid>
-            </form>
-        </Container>
-    );
+        return (
+            <div className="login-container">
+                <div className="login-content">
+                    <h1 className="login-title">EPLE에 로그인 하기</h1>
+                    <SocialLogin />
+                    <div className="or-separator">
+                        <span className="or-text">OR</span>
+                    </div>
+                    <LoginForm {...this.props} />
+                    <span className="signup-link">New user? <Link to="/signup">Sign up!</Link></span>
+                </div>
+            </div>
+        );
+    }
 }
 
-export default Login;
+class SocialLogin extends Component {
+    render() {
+        return (
+            <div className="social-login">
+                <a className="btn btn-block social-btn google" href={GOOGLE_AUTH_URL}>
+                    <img src={googleLogo} alt="Google" /> Login with Google</a>
+            </div>
+        );
+    }
+}
+class LoginForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: '',
+            password: ''
+        };
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleInputChange(event) {
+        const target = event.target;
+        const inputName = target.name;
+        const inputValue = target.value;
+
+        this.setState({
+            [inputName] : inputValue
+        });
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+
+        const loginRequest = Object.assign({}, this.state);
+
+        login(loginRequest)
+        .then(response => {
+            localStorage.setItem(ACCESS_TOKEN, response.accessToken);
+            Alert.success("You're successfully logged in!");
+            this.props.history.push("/");
+        }).catch(error => {
+            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+        });
+    }
+
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit}>
+
+
+            </form>
+        );
+    }
+}
+
+export default Login

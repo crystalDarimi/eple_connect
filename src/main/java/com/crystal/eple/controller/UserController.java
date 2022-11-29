@@ -5,16 +5,16 @@ import com.crystal.eple.domain.entity.UserEntity;
 import com.crystal.eple.dto.request.UserDTO;
 import com.crystal.eple.dto.response.ResponseDTO;
 import com.crystal.eple.security.TokenProvider;
-import com.crystal.eple.service.UserService;
 import com.crystal.eple.service.UserServiceImple;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @Slf4j
@@ -61,25 +61,25 @@ public class UserController {
         }
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticate(@RequestBody UserDTO userDTO){
-        UserEntity user = userService.getByCredentials(
-                userDTO.getEmail(),userDTO.getPassword(),passwordEncoder);
-        if(user !=null){
-            //토큰 생성
-            final String token = tokenProvider.create(user);
-            final UserDTO responseUserDTO = UserDTO.builder()
-                    .email(user.getEmail())
-                    .username(user.getUsername())
-                    .id(user.getId())
-                    .token(token)
-                    .build();
-            return ResponseEntity.ok().body(responseUserDTO);
-        }else {
-            ResponseDTO responseDTO = ResponseDTO.builder()
-                    .error("Login faild.")
-                    .build();
-            return ResponseEntity.badRequest().body(responseDTO);
-        }
-    }
+//    @PostMapping("/signin")
+//    public ResponseEntity<?> authenticate(@RequestBody UserDTO userDTO){
+//        UserEntity user = userService.getByCredentials(
+//                userDTO.getEmail(),userDTO.getPassword(),passwordEncoder);
+//        if(user !=null){
+//            //토큰 생성
+//            final String token = tokenProvider.create(user);
+//            final UserDTO responseUserDTO = UserDTO.builder()
+//                    .email(user.getEmail())
+//                    .username(user.getUsername())
+//                    .id(user.getId())
+//                    .token(token)
+//                    .build();
+//            return ResponseEntity.ok().body(responseUserDTO);
+//        }else {
+//            ResponseDTO responseDTO = ResponseDTO.builder()
+//                    .error("Login faild.")
+//                    .build();
+//            return ResponseEntity.badRequest().body(responseDTO);
+//        }
+//    }
 }

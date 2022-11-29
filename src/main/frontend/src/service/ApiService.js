@@ -3,7 +3,6 @@ const ACCESS_TOKEN = "ACCESS_TOKEN";
 
 
 
-
 export const call =  (api, method, request) => {
     let headers = new Headers({
         "Content-Type": "application/json",
@@ -12,7 +11,7 @@ export const call =  (api, method, request) => {
     //로컬 스토리지에서 ACESS TOKEN 가져오기
     const accessToken = localStorage.getItem(ACCESS_TOKEN);
     if(accessToken && accessToken !== null){
-        headers.append("Authorization","Bearer "+accessToken);
+        headers.append("Authorization","Bearer "+ accessToken);
     }
 
     let options = {

@@ -2,7 +2,6 @@ package com.crystal.eple.controller;
 
 import com.crystal.eple.domain.entity.LectureEntity;
 import com.crystal.eple.domain.entity.ScheduleEntity;
-import com.crystal.eple.dto.request.LectureDTO;
 import com.crystal.eple.dto.request.ScheduleDTO;
 import com.crystal.eple.dto.response.ResponseDTO;
 import com.crystal.eple.service.LectureService;

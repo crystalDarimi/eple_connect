@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import "./App.css";
 
 
-
-const App = () => {
+class App extends Component{
+    constructor(props) {
+        super(props);
+        console.log(props);
+    }
+    render(){
     return <div className="App">
         <h1>
             welcome!
         </h1>
     </div>
+    }
 
 };
 

@@ -1,8 +1,8 @@
 package com.crystal.eple.dto.request;
 
 
-import com.crystal.eple.domain.entity.ScheduleEntity;
 import com.crystal.eple.domain.entity.LectureEntity;
+import com.crystal.eple.domain.entity.ScheduleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

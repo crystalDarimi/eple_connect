@@ -1,7 +1,7 @@
 package com.crystal.eple.service;
 
-import com.crystal.eple.domain.entity.ScheduleEntity;
 import com.crystal.eple.domain.entity.LectureEntity;
+import com.crystal.eple.domain.entity.ScheduleEntity;
 
 import java.util.List;
 
