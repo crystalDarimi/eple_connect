@@ -4,6 +4,7 @@ package com.crystal.eple.dto.request;
 import lombok.*;
 import lombok.Builder;
 
+import java.util.List;
 
 
 @Builder
@@ -19,6 +20,8 @@ public class UserDTO {
     private String password;
     private String id;
     private String email;
+    private List<String> roles;
+    boolean isTeacher;
 
 
 }
