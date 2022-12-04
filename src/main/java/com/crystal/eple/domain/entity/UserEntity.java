@@ -34,7 +34,8 @@ public class UserEntity {
 
     private String password;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(nullable = false)
     private String email; // 유저의 email, 아이디와 같은 기능을 한다.

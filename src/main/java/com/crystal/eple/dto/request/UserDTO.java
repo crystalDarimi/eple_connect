@@ -19,6 +19,7 @@ public class UserDTO {
     private String password;
     private String id;
     private String email;
+    private Boolean isTeacher;
 
 
 }
