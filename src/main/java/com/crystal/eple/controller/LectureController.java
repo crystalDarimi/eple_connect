@@ -7,6 +7,7 @@ import com.crystal.eple.dto.response.ResponseDTO;
 import com.crystal.eple.service.LectureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class LectureController {
 
 
 
+    @Secured("ROLE_TEACHER")
     //생성
     @PostMapping
     public ResponseEntity<?> createLecture(@AuthenticationPrincipal String userId,  @RequestBody LectureDTO lectureDTO){
@@ -81,6 +83,7 @@ public class LectureController {
     }
 
 
+    @Secured("ROLE_TEACHER")
     //수정
     @PutMapping
     public ResponseEntity<?> updateLecture (@AuthenticationPrincipal String userId,@RequestBody LectureDTO dto){
@@ -106,6 +109,7 @@ public class LectureController {
 
     }
 
+    @Secured("ROLE_TEACHER")
     @DeleteMapping
     public ResponseEntity<?> deleteLecture(@AuthenticationPrincipal String userId,@RequestBody LectureDTO dto){
         try {

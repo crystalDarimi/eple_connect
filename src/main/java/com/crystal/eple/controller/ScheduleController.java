@@ -10,6 +10,7 @@ import com.crystal.eple.service.ScheduleServiceImple;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class ScheduleController {
     }
 
     //일정 생성
+    @Secured("ROLE_TEACHER")
     @PostMapping
     public ResponseEntity<?> createSchedule(@RequestBody ScheduleDTO scheduleDTO){
         try{
@@ -108,6 +110,7 @@ public class ScheduleController {
 
 
     //수정
+    @Secured("ROLE_TEACHER")
     @PutMapping
     public ResponseEntity<?> updateSchedule (@RequestBody ScheduleDTO scheduleDTO){
         int tempScheduleId = 2;
@@ -121,6 +124,7 @@ public class ScheduleController {
 
 
     //삭제
+    @Secured("ROLE_TEACHER")
     @DeleteMapping
     public ResponseEntity<?> deleteSchedule(@RequestBody ScheduleDTO scheduleDTO){
         try{
