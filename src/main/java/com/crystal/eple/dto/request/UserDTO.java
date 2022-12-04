@@ -5,6 +5,7 @@ import com.crystal.eple.domain.entity.Role;
 import lombok.*;
 import lombok.Builder;
 
+import java.util.List;
 
 
 @Builder
@@ -20,8 +21,10 @@ public class UserDTO {
     private String password;
     private String id;
     private String email;
+
     private Boolean isTeacher;
     private Role role;
+
 
 
 }

@@ -7,18 +7,23 @@ import com.crystal.eple.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+
 import org.springframework.stereotype.Service;
+
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class TokenProvider {
 
 
@@ -30,8 +35,12 @@ public class TokenProvider {
     }
 
     public String create(UserEntity userEntity, String role) { //JWT 라이브러리를 이용해 JWT 토큰 생성 (임의로 지정한 시크릿키 사용)
+
         Date expiryDate = Date.from( //기한은 1일 뒤로 설정
-                Instant.now().plus(7, ChronoUnit.DAYS));
+                Instant.now().plus(2, ChronoUnit.DAYS));
+        Claims claims = Jwts.claims().setSubject(userEntity.getId());
+        claims.put("roles",userEntity.getRoles());
+
 
 
 
@@ -50,8 +59,9 @@ public class TokenProvider {
 		 */
         // JWT Token 생성
         return Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY) //header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
+                .signWith(SignatureAlgorithm.HS512, secretKey) //header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
                 //payload에 들어갈 내용
+
                 .setSubject(userEntity.getEmail()) //sub
                 .setIssuer("eple app") //iss
                 .setIssuedAt(new Date()) //iat
@@ -68,7 +78,7 @@ public class TokenProvider {
             //위조되지 않았다면 페이로드 (Claims) 리턴, 위조라면 예외를 날림
             //그 중 우리는 userId가 필요하므로 getBody를 부른다
             Claims claims = Jwts.parser()
-                    .setSigningKey(SECRET_KEY)
+                    .setSigningKey(secretKey)
                     .parseClaimsJws(token)
                     .getBody();
 
@@ -84,4 +94,5 @@ public class TokenProvider {
     }
 
 
-}
+
+
