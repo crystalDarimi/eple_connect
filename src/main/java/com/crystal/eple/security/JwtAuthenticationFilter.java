@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,12 +34,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (token != null && !token.equalsIgnoreCase("null")){
                 //userId 가져오기 , 위조된 경우 예외처리
                 String userId = tokenProvider.validateAndGetUserId(token);
+                Authentication auth = tokenProvider.getAuthentication(token);
                 log.info("Authrnticated user ID : "+userId);
                 //인증 완료, SecurityContextHolder에 등록해야 인증된 사용자라고 생각
                 AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userId, // 인증된 사용자의 정보. 문자열이 아니어도 아무거나 넣을 수 있다. 보통 UserDetail을 넣음
-                        null,
-                        AuthorityUtils.NO_AUTHORITIES);
+                        auth);
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();

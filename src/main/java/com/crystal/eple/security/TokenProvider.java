@@ -2,25 +2,38 @@ package com.crystal.eple.security;
 
 
 import com.crystal.eple.domain.entity.UserEntity;
+import com.crystal.eple.service.UserDetailsImpl;
+import com.crystal.eple.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.security.PublicKey;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
 public class TokenProvider {
+
+
+    private final UserDetailsServiceImpl userDetailsService;
     private static final String SECRET_KEY = "NMA8JPctFuna59f5";
-    public String create(UserEntity userEntity) { //JWT 라이브러리를 이용해 JWT 토큰 생성 (임의로 지정한 시크릿키 사용)
+
+    public TokenProvider(UserDetailsServiceImpl userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
+    public String create(UserEntity userEntity, String role) { //JWT 라이브러리를 이용해 JWT 토큰 생성 (임의로 지정한 시크릿키 사용)
         Date expiryDate = Date.from( //기한은 1일 뒤로 설정
                 Instant.now().plus(7, ChronoUnit.DAYS));
+
+
 
         	/*
 		{ // header
@@ -42,7 +55,9 @@ public class TokenProvider {
                 .setSubject(userEntity.getId()) //sub
                 .setIssuer("eple app") //iss
                 .setIssuedAt(new Date()) //iat
+                .claim("roles",role)
                 .setExpiration(expiryDate) //exp
+
                 .compact();
     }
 
@@ -60,5 +75,13 @@ public class TokenProvider {
         return claims.getSubject();
 
     }
+
+
+    public Authentication getAuthentication(String token) {
+        String id = validateAndGetUserId(token);
+        UserDetailsImpl userDetailsImpl = userDetailsService.loadUserByUsername(id);
+        return new UsernamePasswordAuthenticationToken(userDetailsImpl, "", userDetailsImpl.getAuthorities());
+    }
+
 
 }
