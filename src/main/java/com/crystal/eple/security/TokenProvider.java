@@ -52,10 +52,11 @@ public class TokenProvider {
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY) //header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
                 //payload에 들어갈 내용
-                .setSubject(userEntity.getEmail()) //sub
+                .setSubject(userEntity.getId()) //sub
                 .setIssuer("eple app") //iss
                 .setIssuedAt(new Date()) //iat
                 .claim("role",role)
+                .claim("email",userEntity.getEmail())
                 .setExpiration(expiryDate) //exp
 
                 .compact();
@@ -76,11 +77,22 @@ public class TokenProvider {
 
     }
 
+    public String validateAndGetEmail(String token) {
+
+        Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("email").toString();
+
+    }
 
     public Authentication getAuthentication(String token) {
-        String email = validateAndGetUserId(token);
+        String email = validateAndGetEmail(token);
+        String id = validateAndGetUserId(token);
         UserDetailsImpl userDetailsImpl = userDetailsService.loadUserByUsername(email);
-        return new UsernamePasswordAuthenticationToken(userDetailsImpl, "", userDetailsImpl.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(id, "", userDetailsImpl.getAuthorities());
     }
 
 

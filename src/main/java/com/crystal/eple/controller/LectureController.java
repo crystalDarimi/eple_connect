@@ -48,14 +48,26 @@ public class LectureController {
             //4 서비스를 이용해 엔티티 생성
             List<LectureEntity> entities = lectureService.createLecture(entity);
 
-            //5 자바 스트림을 이용해 리턴된 엔티티 리스트를 dto 리스트로 변환
-            List<LectureDTO> dtos = entities.stream().map(LectureDTO::new).collect(Collectors.toList());
 
-            //6 변환된 dto를 잉ㅎㅇ해 dto 포기화
-            ResponseDTO<LectureDTO> response = ResponseDTO.<LectureDTO>builder().data(dtos).build();
+
+            LectureDTO responseLectureDTO = LectureDTO.builder()
+                    .lectureTitle(entity.getLectureTitle())
+                    .lectureCode(entity.getLectureCode())
+                    .cycle(entity.getCycle())
+                    .fee(entity.getFee())
+                    .color(entity.getColor())
+                    .dayTwo(entity.getDayTwo())
+                    .minutesPerOnce(entity.getMinutesPerOnce())
+                    .dayOne(entity.getDayOne())
+                    .momNumber(entity.getMomNumber())
+                    .schoolAge(entity.getSchoolAge())
+                    .stdName(entity.getStdName())
+                    .timeOne(entity.getTimeOne())
+                    .timeTwo(entity.getTimeTwo())
+                    .build();
 
             //7 responseDTO 리턴
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(responseLectureDTO);
 
         } catch (Exception e){
             //8 혹시 예외가 나는 경우 dto 대신 메세지 넣어서 리턴
