@@ -1,6 +1,7 @@
 package com.crystal.eple.dto.request;
 
 
+import com.crystal.eple.domain.entity.Role;
 import lombok.*;
 import lombok.Builder;
 
@@ -20,6 +21,7 @@ public class UserDTO {
     private String id;
     private String email;
     private Boolean isTeacher;
+    private Role role;
 
 
 }

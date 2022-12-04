@@ -1,6 +1,7 @@
 package com.crystal.eple.controller;
 
 
+import com.crystal.eple.domain.entity.Role;
 import com.crystal.eple.domain.entity.UserEntity;
 import com.crystal.eple.dto.request.UserDTO;
 import com.crystal.eple.dto.response.ResponseDTO;
@@ -37,10 +38,15 @@ public class UserController {
             if(userDTO == null || userDTO.getPassword()==null){
                 throw new RuntimeException("Invelid Password value");
             }
+            Role userRole;
+            if(userDTO.getIsTeacher()==true){
+                userRole = Role.TEACHER; } else userRole = Role.STUDENT;
+
             //요청을 이용해 저장할 유저 만들기
             UserEntity user = UserEntity.builder()
                     .email(userDTO.getEmail())
                     .username(userDTO.getUsername())
+                    .role(userRole)
                     .password(passwordEncoder.encode(userDTO.getPassword()))
                     .build();
 
@@ -50,6 +56,7 @@ public class UserController {
                     .email(registerUser.getEmail())
                     .id(registerUser.getId())
                     .username(registerUser.getUsername())
+                    .role(userRole)
                     .build();
             //return ResponseEntity.ok().body(responseUserDTO);
             return ResponseEntity.ok(responseUserDTO);
@@ -66,13 +73,18 @@ public class UserController {
         UserEntity user = userService.getByCredentials(
                 userDTO.getEmail(),userDTO.getPassword(),passwordEncoder);
         if(user !=null){
+            Role userRole;
+            if(userDTO.getIsTeacher()==true){
+                userRole = Role.TEACHER; } else userRole = Role.STUDENT;
             //토큰 생성
-            final String token = tokenProvider.create(user);
+            final String token = tokenProvider.create(user,userRole.getKey());
+
             final UserDTO responseUserDTO = UserDTO.builder()
                     .email(user.getEmail())
                     .username(user.getUsername())
                     .id(user.getId())
                     .token(token)
+                    .role(userRole)
                     .build();
             return ResponseEntity.ok().body(responseUserDTO);
         }else {
