@@ -1,9 +1,13 @@
 package com.crystal.eple.controller;
 
 
+import com.crystal.eple.domain.entity.InvitaionTokenEntity;
 import com.crystal.eple.domain.entity.LectureEntity;
+import com.crystal.eple.domain.repository.LectureRepository;
 import com.crystal.eple.dto.request.LectureDTO;
 import com.crystal.eple.dto.response.ResponseDTO;
+import com.crystal.eple.service.CalendarService;
+import com.crystal.eple.service.InvitationService;
 import com.crystal.eple.service.LectureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,18 +24,24 @@ import java.util.stream.Collectors;
 public class LectureController {
 
 
+    private final CalendarService calendarService;
     public final LectureService lectureService;
 
+    public  final InvitationService invitationService;
+
+
     @Autowired
-    public LectureController(LectureService lectureService) {
+    public LectureController(CalendarService calendarService, LectureService lectureService, InvitationService invitationService) {
+        this.calendarService = calendarService;
         this.lectureService = lectureService;
+        this.invitationService = invitationService;
     }
 
 
 
 
     @Secured("ROLE_TEACHER")
-    //생성
+    //과외 생성 -> 토큰 반환
     @PostMapping
     public ResponseEntity<?> createLecture(@AuthenticationPrincipal String userId,  @RequestBody LectureDTO lectureDTO){
         try{
@@ -42,13 +52,15 @@ public class LectureController {
             //(2) id 를 null 로 초기화 생성 당시에는 없어야 하니까
             entity.setTeacherId(null);
 
-            //3 임시 유저 아이디 설정 -> 니중에 바꿔줄거임
             entity.setTeacherId(userId);
 
             //4 서비스를 이용해 엔티티 생성
             List<LectureEntity> entities = lectureService.createLecture(entity);
 
 
+            LectureEntity savedLecture = lectureService.retrieveLectureByTitle(entity.getLectureTitle());
+            InvitaionTokenEntity invitaionToken = invitationService.createInvitaion(savedLecture);
+            /*
 
             LectureDTO responseLectureDTO = LectureDTO.builder()
                     .lectureTitle(entity.getLectureTitle())
@@ -64,10 +76,15 @@ public class LectureController {
                     .stdName(entity.getStdName())
                     .timeOne(entity.getTimeOne())
                     .timeTwo(entity.getTimeTwo())
+                    .invitationToken(invitaionToken.getInviteToken())
                     .build();
 
+
+             */
+
+            String responseTokenDTO = invitaionToken.getInviteToken();
             //7 responseDTO 리턴
-            return ResponseEntity.ok(responseLectureDTO);
+            return ResponseEntity.ok(responseTokenDTO);
 
         } catch (Exception e){
             //8 혹시 예외가 나는 경우 dto 대신 메세지 넣어서 리턴

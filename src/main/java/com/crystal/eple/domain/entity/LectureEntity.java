@@ -25,8 +25,12 @@ public class LectureEntity {
     @Column(name = "lecture_title",length = 100, nullable = true) //과외 이름
     private String lectureTitle;
 
-    @Column(name = "teacher_id",nullable = true)
+    @Column(name = "teacher_id",nullable = false)
     private String teacherId;
+
+    @Column(name = "student_id",nullable = true)
+    private String studentId;
+
 
     @Column(length = 20,nullable = true)
     private String color;
@@ -70,6 +74,8 @@ public class LectureEntity {
     @Transient //엔티티클래스에는 선언되어 있지만 데베에는 필요없을 경우
     int presentCycle;
 
+
+
     //수업 일정과 일대다 관계
    @JsonManagedReference
     @OneToMany(mappedBy ="lectureEntity",fetch = FetchType.EAGER)
@@ -81,6 +87,13 @@ public class LectureEntity {
     @JoinColumn(name="calendar_id")
     @ToString.Exclude
     private CalendarEntity calendarEntity;
+
+/*
+    @OneToOne(mappedBy = "lectureEntity")
+    private InvitaionTokenEntity invitaionTokenEntity;
+
+ */
+
     @Builder
     public LectureEntity(List<ScheduleEntity> scheduleEntities, String lectureTitle, String color, String stdName, int cycle, Long fee, long minutesPerOnce, DayOfWeek dayOne, DayOfWeek dayTwo, String stdNumber, String momNumber, String schoolAge, String timeOne, String timeTwo) {
         this.lectureTitle = lectureTitle;

@@ -66,8 +66,8 @@ public class ScheduleServiceImple implements ScheduleService{
 
         original.ifPresent(newSchedule ->{
             newSchedule.setDate(scheduleEntity.getDate());
-            newSchedule.setEndTime(scheduleEntity.getEndTime());
-            newSchedule.setStartTime(scheduleEntity.getStartTime());
+            newSchedule.setEnd(scheduleEntity.getEnd());
+            newSchedule.setStart(scheduleEntity.getStart());
 
             scheduleRepository.save(newSchedule);
         });
@@ -149,19 +149,19 @@ public class ScheduleServiceImple implements ScheduleService{
         if(testList!=null){
             for(ScheduleEntity i : testList) {
                 //캘린더 번호 식별 추가하기
-                    if (scheduleEntity.getStartTime().isAfter(i.getStartTime())) {
-                        if (scheduleEntity.getStartTime().isBefore(i.getEndTime())) {
+                    if (scheduleEntity.getStart().isAfter(i.getStart())) {
+                        if (scheduleEntity.getStart().isBefore(i.getEnd())) {
                             log.warn("schedule can not be overlaped ");
                             throw new RuntimeException("schedule can not be overlaped ");
-                        } else if (scheduleEntity.getEndTime().isBefore(i.getEndTime())) {
+                        } else if (scheduleEntity.getEnd().isBefore(i.getEnd())) {
                             log.warn("schedule can not be overlaped ");
                             throw new RuntimeException("schedule can not be overlaped ");
                         }
-                    } else if (scheduleEntity.getStartTime().isBefore(i.getStartTime())) {
-                        if (scheduleEntity.getEndTime().isAfter(i.getEndTime())) {
+                    } else if (scheduleEntity.getStart().isBefore(i.getStart())) {
+                        if (scheduleEntity.getEnd().isAfter(i.getEnd())) {
                             log.warn("schedule can not be overlaped ");
                             throw new RuntimeException("schedule can not be overlaped ");
-                        } else if (scheduleEntity.getEndTime().isAfter(i.getStartTime())) {
+                        } else if (scheduleEntity.getEnd().isAfter(i.getStart())) {
                             log.warn("schedule can not be overlaped ");
                             throw new RuntimeException("schedule can not be overlaped ");
                         }

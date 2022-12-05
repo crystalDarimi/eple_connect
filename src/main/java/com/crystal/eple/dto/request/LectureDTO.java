@@ -46,6 +46,8 @@ public class LectureDTO {
 
     private int presentCycle;
 
+    private String invitationToken;
+
     private List<ScheduleEntity> scheduleEntities;
 
     public LectureDTO(final LectureEntity lectureEntity) {
