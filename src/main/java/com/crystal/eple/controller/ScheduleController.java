@@ -11,8 +11,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,8 +95,15 @@ public class ScheduleController {
 
     //검색(과외로 모든 수업 조회하기)
     @GetMapping
-    public  ResponseEntity<?> retrieveScheduleList(){
+
+    public  ResponseEntity<?> retrieveScheduleList(@AuthenticationPrincipal String userId){
         String temporaryLectureTitle = "나수정 영어";
+        List<LectureEntity> lectureEntities = lectureService.retrieveLecture(userId);
+        List<ScheduleEntity> scheduleEntities = new ArrayList<>();
+        for (LectureEntity lectureEntity : lectureEntities){
+            lectureEntity = lectureService.retrieveLectureByTitle(lectureEntity.getLectureTitle());
+
+        }
         LectureEntity lectureEntity = lectureService.retrieveLectureByTitle(temporaryLectureTitle);
 
         //(1) 서비스 메서드의 retrive 메서드를 이용해 리스트를 가져옴;

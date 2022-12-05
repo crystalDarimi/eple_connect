@@ -1,7 +1,6 @@
 package com.crystal.eple.domain.entity;
 
 
-import ch.qos.logback.classic.db.names.ColumnName;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -41,6 +40,9 @@ public class UserEntity {
     private String email; // 유저의 email, 아이디와 같은 기능을 한다.
 
     private String authProvider;
+
+    @Column(name="calendar_id")
+    Long calendarId;
 
 
 

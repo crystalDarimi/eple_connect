@@ -35,6 +35,9 @@ public class ScheduleEntity {
     @Column(name = "end")
     private LocalDateTime end;
 
+    @Column(name="calendar_Id")
+    Long calendarId;
+
     @Column(name="date")
     LocalDate date;
     @Column(name="start_time")

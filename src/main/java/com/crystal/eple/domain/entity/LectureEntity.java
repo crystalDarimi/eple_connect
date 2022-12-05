@@ -1,5 +1,6 @@
 package com.crystal.eple.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -74,9 +75,12 @@ public class LectureEntity {
     @OneToMany(mappedBy ="lectureEntity",fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<ScheduleEntity> scheduleEntities = new ArrayList<>();
-    /*
 
-     */
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="calendar_id")
+    @ToString.Exclude
+    private CalendarEntity calendarEntity;
     @Builder
     public LectureEntity(List<ScheduleEntity> scheduleEntities, String lectureTitle, String color, String stdName, int cycle, Long fee, long minutesPerOnce, DayOfWeek dayOne, DayOfWeek dayTwo, String stdNumber, String momNumber, String schoolAge, String timeOne, String timeTwo) {
         this.lectureTitle = lectureTitle;

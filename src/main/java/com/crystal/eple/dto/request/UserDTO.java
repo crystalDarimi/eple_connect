@@ -22,6 +22,7 @@ public class UserDTO {
     private String email;
     private Boolean isTeacher;
     private Role role;
+    private Long calendarId;
 
 
 }

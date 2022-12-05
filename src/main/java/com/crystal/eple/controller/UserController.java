@@ -1,11 +1,13 @@
 package com.crystal.eple.controller;
 
 
+import com.crystal.eple.domain.entity.CalendarEntity;
 import com.crystal.eple.domain.entity.Role;
 import com.crystal.eple.domain.entity.UserEntity;
 import com.crystal.eple.dto.request.UserDTO;
 import com.crystal.eple.dto.response.ResponseDTO;
 import com.crystal.eple.security.TokenProvider;
+import com.crystal.eple.service.CalendarService;
 import com.crystal.eple.service.UserService;
 import com.crystal.eple.service.UserServiceImple;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,9 @@ public class UserController {
     private UserServiceImple userService;
 
     @Autowired
+    private CalendarService calendarService;
+
+    @Autowired
     private TokenProvider tokenProvider;
 
     //Bean으로 작성해도 ok
@@ -39,8 +44,10 @@ public class UserController {
                 throw new RuntimeException("Invelid Password value");
             }
             Role userRole;
+            CalendarEntity calendarEntity = null;
             if(userDTO.getIsTeacher()==true){
-                userRole = Role.TEACHER; } else userRole = Role.STUDENT;
+                userRole = Role.TEACHER;
+            } else userRole = Role.STUDENT;
 
             //요청을 이용해 저장할 유저 만들기
             UserEntity user = UserEntity.builder()
@@ -52,11 +59,17 @@ public class UserController {
 
             //서비스를 이용해 리포지토리에 유저 저장
             UserEntity registerUser = userService.createUser(user);
+
+            if(userRole == Role.TEACHER) {
+                calendarEntity = calendarService.createCalendar(registerUser);
+            }
+
             UserDTO responseUserDTO = UserDTO.builder()
                     .email(registerUser.getEmail())
                     .id(registerUser.getId())
                     .username(registerUser.getUsername())
                     .role(userRole)
+                    .calendarId(calendarEntity.getCalendarId())
                     .build();
             //return ResponseEntity.ok().body(responseUserDTO);
             return ResponseEntity.ok(responseUserDTO);
@@ -75,7 +88,10 @@ public class UserController {
         if(user !=null){
             Role userRole;
             if(userDTO.getIsTeacher()==true){
-                userRole = Role.TEACHER; } else userRole = Role.STUDENT;
+                userRole = Role.TEACHER;
+
+
+            } else userRole = Role.STUDENT;
             //토큰 생성
             final String token = tokenProvider.create(user,userRole.getKey());
 
