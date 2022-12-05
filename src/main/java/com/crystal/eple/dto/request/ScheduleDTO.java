@@ -31,6 +31,8 @@ public class ScheduleDTO {
 
     private String lectureTitle;
 
+    private Long calendarId;
+
 
 
     public ScheduleDTO(final ScheduleEntity scheduleEntity){
@@ -39,6 +41,7 @@ public class ScheduleDTO {
        this.start = scheduleEntity.getStart();
        this.end = scheduleEntity.getEnd();
        this.lectureEntity = scheduleEntity.getLectureEntity();
+       this.calendarId = scheduleEntity.getCalendarId();
     }
 
     public static ScheduleEntity toScheduleEntity(final ScheduleDTO scheduleDTO){
@@ -48,6 +51,7 @@ public class ScheduleDTO {
                 .start(scheduleDTO.getStart())
                 .end(scheduleDTO.getEnd())
                 .lectureEntity(scheduleDTO.getLectureEntity())
+                .calendarId(scheduleDTO.getCalendarId())
                 .build();
     }
 
