@@ -33,6 +33,7 @@ public class InvitationService {
                 .inviteToken(getUniqueId())
                 .lectureEntity(lectureEntity)
                 .TeacherId(lectureEntity.getTeacherId())
+                .CalendarId(lectureEntity.getCalendarEntity().getCalendarId())
                 .useState(false)
                 .build();
 

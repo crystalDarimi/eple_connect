@@ -1,6 +1,7 @@
 package com.crystal.eple.controller;
 
 
+import com.crystal.eple.domain.entity.CalendarEntity;
 import com.crystal.eple.domain.entity.InvitaionTokenEntity;
 import com.crystal.eple.domain.entity.LectureEntity;
 import com.crystal.eple.domain.repository.LectureRepository;
@@ -30,6 +31,8 @@ public class LectureController {
     public  final InvitationService invitationService;
 
 
+
+
     @Autowired
     public LectureController(CalendarService calendarService, LectureService lectureService, InvitationService invitationService) {
         this.calendarService = calendarService;
@@ -53,13 +56,18 @@ public class LectureController {
             entity.setTeacherId(null);
 
             entity.setTeacherId(userId);
+            CalendarEntity calendarEntity = calendarService.retrieveCalendar(userId);
+            entity.setCalendarEntity(calendarEntity);
+
 
             //4 서비스를 이용해 엔티티 생성
             List<LectureEntity> entities = lectureService.createLecture(entity);
 
 
+
             LectureEntity savedLecture = lectureService.retrieveLectureByTitle(entity.getLectureTitle());
             InvitaionTokenEntity invitaionToken = invitationService.createInvitaion(savedLecture);
+
             /*
 
             LectureDTO responseLectureDTO = LectureDTO.builder()

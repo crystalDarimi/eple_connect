@@ -59,6 +59,10 @@ public class CalendarService {
 
     }
 
+    public CalendarEntity retrieveCalendar(String teacherId){
+        CalendarEntity calendarEntity = calendarRepository.findByTeacherId(teacherId);
+        return calendarEntity;
+    }
 
     private void validate(UserEntity userEntity){
         if(userEntity.getCalendarId() != null){
