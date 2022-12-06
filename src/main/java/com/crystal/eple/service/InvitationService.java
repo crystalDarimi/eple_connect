@@ -3,8 +3,10 @@ package com.crystal.eple.service;
 
 import com.crystal.eple.domain.entity.InvitaionTokenEntity;
 import com.crystal.eple.domain.entity.LectureEntity;
+import com.crystal.eple.domain.entity.UserEntity;
 import com.crystal.eple.domain.repository.InvitaionTokenRepository;
 import com.crystal.eple.domain.repository.LectureRepository;
+import com.crystal.eple.domain.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
@@ -20,14 +22,15 @@ public class InvitationService {
 
     private final LectureRepository lectureRepository;
 
-    public InvitationService(InvitaionTokenRepository invitaionTokenRepository, LectureRepository lectureRepository) {
+    private final UserRepository userRepository;
+
+    public InvitationService(InvitaionTokenRepository invitaionTokenRepository, LectureRepository lectureRepository, UserRepository userRepository) {
         this.invitaionTokenRepository = invitaionTokenRepository;
         this.lectureRepository = lectureRepository;
+        this.userRepository = userRepository;
     }
 
     public InvitaionTokenEntity createInvitaion(final LectureEntity lectureEntity) {
-
-
 
         InvitaionTokenEntity invitation = InvitaionTokenEntity.builder()
                 .inviteToken(getUniqueId())
@@ -73,6 +76,34 @@ public class InvitationService {
         return invitaionTokenRepository.findByLectureEntity(saved.getLectureEntity());
     }
 
+    public void setInvitation(String stdId, String invitationToken){
+        if(!invitaionTokenRepository.existsByInviteToken(invitationToken)) {
+                log.warn("invitation cannot find");
+                throw  new RuntimeException("invitation cannot find");
+            }
+
+        Optional<UserEntity> student = userRepository.findById(stdId);
+        InvitaionTokenEntity invitation = invitaionTokenRepository.findByInviteToken(invitationToken);
+        LectureEntity lecture = invitation.getLectureEntity();
+
+        student.ifPresent(newStudent -> {
+            newStudent.setCalendarId(invitation.getCalendarId());
+            newStudent.setRole(student.get().getRole());
+            newStudent.setId(student.get().getId());
+            newStudent.setPassword(student.get().getPassword());
+            newStudent.setEmail(student.get().getEmail());
+            newStudent.setUsername(student.get().getUsername());
+            newStudent.setAuthProvider(student.get().getAuthProvider());
+
+            userRepository.save(newStudent);
+
+        });
+
+        lecture.setStudentId(stdId);
+        lectureRepository.save(lecture);
+
+        log.info("저장 완료");
+    }
 
     public String getInvitationToken(LectureEntity lectureEntity){
         String teacherId = lectureEntity.getTeacherId();

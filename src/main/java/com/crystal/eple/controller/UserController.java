@@ -5,16 +5,16 @@ import com.crystal.eple.domain.entity.CalendarEntity;
 import com.crystal.eple.domain.entity.Role;
 import com.crystal.eple.domain.entity.UserEntity;
 import com.crystal.eple.dto.request.UserDTO;
+import com.crystal.eple.dto.request.InvitationDTO;
 import com.crystal.eple.dto.response.ResponseDTO;
 import com.crystal.eple.security.TokenProvider;
 import com.crystal.eple.service.CalendarService;
-import com.crystal.eple.service.UserService;
+import com.crystal.eple.service.InvitationService;
 import com.crystal.eple.service.UserServiceImple;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +33,9 @@ public class UserController {
 
     @Autowired
     private TokenProvider tokenProvider;
+
+    @Autowired
+    private InvitationService invitationService;
 
     //Bean으로 작성해도 ok
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -62,6 +65,11 @@ public class UserController {
 
             if(userRole == Role.TEACHER) {
                 calendarEntity = calendarService.createCalendar(registerUser);
+            }
+
+            if(userRole == Role.STUDENT) {
+               invitationService.setInvitation(registerUser.getId(),userDTO.getInviteToken());
+
             }
 
             UserDTO responseUserDTO = UserDTO.builder()
@@ -109,5 +117,14 @@ public class UserController {
                     .build();
             return ResponseEntity.badRequest().body(responseDTO);
         }
+    }
+
+
+    @PostMapping("/connect")
+    public ResponseEntity<?> authenticate(@AuthenticationPrincipal String userId, @RequestBody InvitationDTO invitationDTO){
+        invitationService.setInvitation(userId,invitationDTO.getInviteToken());
+
+        String str = "연결 완료";
+        return ResponseEntity.ok(str);
     }
 }

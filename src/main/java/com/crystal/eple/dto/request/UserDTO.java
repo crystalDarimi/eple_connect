@@ -23,6 +23,7 @@ public class UserDTO {
     private Boolean isTeacher;
     private Role role;
     private Long calendarId;
+  private String inviteToken;
 
 
 }

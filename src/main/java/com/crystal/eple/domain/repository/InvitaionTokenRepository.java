@@ -8,5 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface InvitaionTokenRepository extends JpaRepository<InvitaionTokenEntity,String> {
     InvitaionTokenEntity findByLectureEntity(LectureEntity lectureEntity);
 
+    Boolean existsByInviteToken(String invitationToken);
+    InvitaionTokenEntity findByInviteToken(String invitationToken);
 
 }
