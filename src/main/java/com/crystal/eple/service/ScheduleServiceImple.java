@@ -1,9 +1,12 @@
 package com.crystal.eple.service;
 
+import com.crystal.eple.domain.entity.CalendarEntity;
 import com.crystal.eple.domain.entity.LectureEntity;
 import com.crystal.eple.domain.entity.ScheduleEntity;
+import com.crystal.eple.domain.entity.UserEntity;
 import com.crystal.eple.domain.repository.LectureRepository;
 import com.crystal.eple.domain.repository.ScheduleRepository;
+import com.crystal.eple.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,15 +23,18 @@ public class ScheduleServiceImple implements ScheduleService{
 
     private final LectureRepository lectureRepository;
     private final ScheduleRepository scheduleRepository;
+    private  final UserRepository userRepository;
 
-    //수업 생성
+    //일정 생성
     @Override
     @Transactional
     public List<ScheduleEntity> createSchedule(final ScheduleEntity scheduleEntity,String lectureTitle){
 
         validate(scheduleEntity,lectureTitle); //validation (검증)
+        LectureEntity lectureEntity = lectureRepository.findByLectureTitle(lectureTitle);
         validateDateTime(scheduleEntity);
-        scheduleEntity.setLectureEntity(lectureRepository.findByLectureTitle(lectureTitle));
+        scheduleEntity.setLectureEntity(lectureEntity);
+        scheduleEntity.setCalendarId(lectureEntity.getCalendarEntity().getCalendarId());
         scheduleCounterHandler(scheduleEntity,true); //과외의 전체 카운터 +1
         scheduleRepository.save(scheduleEntity);
         log.info("Schedule Id : {} is saved",scheduleEntity.getScheduleId());
@@ -42,8 +48,10 @@ public class ScheduleServiceImple implements ScheduleService{
     public ScheduleEntity creatingSchedule(final ScheduleEntity scheduleEntity,String lectureTitle){
 
         validate(scheduleEntity,lectureTitle); //validation (검증)
+        LectureEntity lectureEntity = lectureRepository.findByLectureTitle(lectureTitle);
         validateDateTime(scheduleEntity);
-        scheduleEntity.setLectureEntity(lectureRepository.findByLectureTitle(lectureTitle));
+        scheduleEntity.setLectureEntity(lectureEntity);
+        scheduleEntity.setCalendarId(lectureEntity.getCalendarEntity().getCalendarId());
         scheduleCounterHandler(scheduleEntity,true); //과외의 전체 카운터 +1
         scheduleRepository.save(scheduleEntity);
         log.info("Schedule Id : {} is saved",scheduleEntity.getScheduleId());
@@ -85,11 +93,22 @@ public class ScheduleServiceImple implements ScheduleService{
 
 
 
+
+
     //캘린더 id로 수업 리스트 조회
     @Override
-    public List<ScheduleEntity> findAllByCalendar(final Long calendarId) {
+    public List<ScheduleEntity> findAllByCalendar(final String userId) {
 
-        return null;
+        Optional<UserEntity> user = userRepository.findById(userId);
+        if(user.isPresent()){
+           return scheduleRepository.findAllByCalendarId(user.get().getCalendarId());
+        }
+        else {
+            log.warn("일정 조회 실패 ");
+            throw new RuntimeException("일정 조회 실패 ");
+
+        }
+
     }
 
 

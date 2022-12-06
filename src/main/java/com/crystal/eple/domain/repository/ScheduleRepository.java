@@ -17,6 +17,7 @@ public interface ScheduleRepository extends JpaRepository<ScheduleEntity,Long> {
     ScheduleEntity findByScheduleId(Long scheduleId);
 
     List<ScheduleEntity> findAllByDate(LocalDate date);
+    List<ScheduleEntity> findAllByCalendarId(Long calendarId);
 
    // List<ScheduleEntity>findAllByTimeBetween(Date StartTime, Date endTime);
 

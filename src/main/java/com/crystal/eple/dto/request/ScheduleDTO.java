@@ -31,6 +31,10 @@ public class ScheduleDTO {
 
     private String lectureTitle;
 
+    private int presentCycle;
+
+    private int cycle;
+
     private Long calendarId;
 
 
