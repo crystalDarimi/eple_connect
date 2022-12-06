@@ -12,8 +12,8 @@ const Header = () =>{
                     <nav>
                         <ul>
 
-                            <li className='Notification'><NotificationsIcon fontSize='large' /></li>
-                            <li className='Profile'><AccountBoxIcon fontSize='large' /></li> {/* icon 빼고 프로필 설정 작업 필요 */}
+                            {/* <li className='Notification'><NotificationsIcon fontSize='large' /></li> */}
+                             {/* <li className='Profile'><AccountBoxIcon fontSize='large' /></li>icon 빼고 프로필 설정 작업 필요 */}
                             <li className='signout'> <Button color="inherit" raised onClick={ signout }>
                                 로그아웃
                             </Button></li>

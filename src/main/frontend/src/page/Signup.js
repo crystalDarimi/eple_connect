@@ -1,6 +1,8 @@
 import React from "react";
 import {Container, Grid, Typography, TextField, Button,Link }  from "@mui/material";
 import {signup} from "../service/ApiService";
+import { GOOGLE_AUTH_URL } from '../constants';
+import googleLogo from '../google-logo.png';
 
 const Signup = () =>{
     const handleSubmit = (event) =>{
@@ -72,6 +74,15 @@ const Signup = () =>{
                             autoComplete="current-password"
                         />
                     </Grid>
+                    <Grid item xs = {12}>
+                                        <div>
+                                            <div className="social-login">
+                                                 <a className="btn btn-block social-btn google" crossorigin href={GOOGLE_AUTH_URL}>
+                                                     <img src={googleLogo} alt="Google" /></a>
+                                            </div>
+                                        </div>
+                    </Grid>
+
                     <Grid item xs = {12}>
                         <Button type = "submit" fullWidth variant="contained" color="primary">
                             계정 생성

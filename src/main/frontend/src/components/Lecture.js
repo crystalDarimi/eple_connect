@@ -4,6 +4,7 @@ import DeleteOutlined from "@mui/icons-material/DeleteOutlined"
 
 
 
+
 const Lecture = (props) => {
     const [state, setState] = useState({ item: props.item, readOnly: true });
     const deleteItem = props.deleteItem;

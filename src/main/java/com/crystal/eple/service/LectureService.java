@@ -135,8 +135,5 @@ public class LectureService {
             log.warn("lecture title cannot be null");
             throw  new RuntimeException("lecture title cannot be null");
         }
-
-
-
     }
 }

@@ -14,14 +14,16 @@ import java.util.Map;
 public class UserPrincipal implements OAuth2User, UserDetails {
     private String  id;
     private String email;
+    private String name;
     private String password;
-    private String role;
+    private String img;
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
-    public UserPrincipal(String id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(String id, String email, String img, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;
+        this.img = img;
         this.password = password;
         this.authorities = authorities;
     }
@@ -34,6 +36,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getImageUrl(),
                 authorities
         );
     }
@@ -59,9 +62,12 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return null;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -99,6 +105,14 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getName() {
-        return String.valueOf(id);
+        return name;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 }

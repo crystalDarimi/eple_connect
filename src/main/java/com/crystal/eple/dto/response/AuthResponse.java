@@ -1,4 +1,4 @@
-package com.crystal.eple.Auth.payload;
+package com.crystal.eple.dto.response;
 
 public class AuthResponse {
     private String accessToken;

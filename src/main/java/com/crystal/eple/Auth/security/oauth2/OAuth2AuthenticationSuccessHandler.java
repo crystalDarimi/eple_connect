@@ -1,11 +1,10 @@
 package com.crystal.eple.Auth.security.oauth2;
 
 
-
 import com.crystal.eple.Auth.exception.BadRequestException;
-import com.crystal.eple.Auth.security.SocialTokenProvider;
 import com.crystal.eple.Auth.util.CookieUtils;
 import com.crystal.eple.config.AppProperties;
+import com.crystal.eple.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -25,7 +24,7 @@ import static com.crystal.eple.Auth.security.oauth2.HttpCookieOAuth2Authorizatio
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final SocialTokenProvider socialTokenProvider;
+    private final TokenProvider TokenProvider;
 
     private final AppProperties appProperties;
 
@@ -33,9 +32,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 
     @Autowired
-    OAuth2AuthenticationSuccessHandler(SocialTokenProvider socialTokenProvider, AppProperties appProperties,
+    OAuth2AuthenticationSuccessHandler(TokenProvider socialTokenProvider, AppProperties appProperties,
                                        HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
-        this.socialTokenProvider = socialTokenProvider;
+        this.TokenProvider = socialTokenProvider;
         this.appProperties = appProperties;
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
     }
@@ -63,7 +62,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        String token = socialTokenProvider.createToken(authentication);
+        String token = TokenProvider.createToken(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)

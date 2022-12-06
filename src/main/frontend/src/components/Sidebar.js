@@ -10,30 +10,35 @@ import { Link,NavLink } from 'react-router-dom';
 const Sidebar = ({children}) => {
 
     const menuItem = [
-        {
-            name:"Dashboard",
-            icon: <HomeIcon />,
-            path: "./dashboard"
-        },
+        // {
+        //     name:"Dashboard",
+        //     icon: <HomeIcon />,
+        //     path: "./dashboard"
+        // },
         {
             name:"캘린더",
             icon: <CalendarMonthIcon />,
             path: "./calendar"
         },
-        {
-            name:"채팅메시지",
-            icon: <ChatBubbleOutlineIcon />,
-            path: "./chatting"
-        },
-        {
-            name:"자료실",
-            icon: <ArchiveIcon />,
-            path: "./archive"
-        },
+        // {
+        //     name:"채팅메시지",
+        //     icon: <ChatBubbleOutlineIcon />,
+        //     path: "./chatting"
+        // },
+        // {
+        //     name:"자료실",
+        //     icon: <ArchiveIcon />,
+        //     path: "./archive"
+        // },
         {
             name:"My Students",
             icon: <PeopleOutlineIcon />,
-            path: "./mystudents"
+            path: "./mystudent"
+        },
+        {
+            name:"My Class",
+            icon: <PeopleOutlineIcon />,
+            path: "./myclass"
         },
     ]
     return(

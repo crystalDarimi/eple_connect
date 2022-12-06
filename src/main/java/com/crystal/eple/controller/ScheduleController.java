@@ -54,7 +54,6 @@ public class ScheduleController {
            // return new ResponseEntity<ScheduleDTO>(HttpStatus.UNAUTHORIZED);
         }
     }
-
     @PostMapping("/one")
     public ResponseEntity<?> creatingSchedule(@RequestBody ScheduleDTO scheduleDTO){
         try{
