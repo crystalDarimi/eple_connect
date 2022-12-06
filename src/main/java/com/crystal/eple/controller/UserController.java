@@ -69,7 +69,6 @@ public class UserController {
 
             if(userRole == Role.STUDENT) {
                invitationService.setInvitation(registerUser.getId(),userDTO.getInviteToken());
-
             }
 
             UserDTO responseUserDTO = UserDTO.builder()
@@ -94,12 +93,8 @@ public class UserController {
         UserEntity user = userService.getByCredentials(
                 userDTO.getEmail(),userDTO.getPassword(),passwordEncoder);
         if(user !=null){
-            Role userRole;
-            if(userDTO.getIsTeacher()==true){
-                userRole = Role.TEACHER;
+            Role userRole = user.getRole();
 
-
-            } else userRole = Role.STUDENT;
             //토큰 생성
             final String token = tokenProvider.create(user,userRole.getKey());
 

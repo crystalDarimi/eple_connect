@@ -97,7 +97,6 @@ task copyReactBuildFiles(type: Copy) {
 
 task('release') {
 	dependsOn("build")
-
 	doLast {
 		def stdout = new ByteArrayOutputStream()
 		exec {
@@ -110,7 +109,7 @@ task('release') {
 			commandLine 'eb', 'deploy'
 			standardOutput = stdout
 		}
-		println "en deploy :\n$stdout";
+		println "eb deploy :\n$stdout";
 		println "Release succeeded."
 	}
 }
