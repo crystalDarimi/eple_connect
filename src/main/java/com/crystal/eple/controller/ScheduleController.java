@@ -26,6 +26,8 @@ public class ScheduleController {
     public final ScheduleServiceImple scheduleService;
     public final LectureService lectureService;
 
+
+
     @Autowired
     public ScheduleController (ScheduleServiceImple scheduleService,LectureService lectureService){
         this.scheduleService = scheduleService;

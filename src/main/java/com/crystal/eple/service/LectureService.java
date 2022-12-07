@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +70,15 @@ public class LectureService {
     public LectureEntity retrieveLectureByTitle (final String lectureTitle){
         return lectureRepository.findByLectureTitle(lectureTitle);}
 
+    public List<String> getLectureTitle(final String teacherId){
+        List<String> lectureTitles = new ArrayList<>();
+        List<LectureEntity> lectureEntities = retrieveLecture(teacherId);
+
+        for(LectureEntity lecture : lectureEntities){
+            lectureTitles.add(lecture.getLectureTitle());
+        }
+        return lectureTitles;
+    }
     //과외 검색
     public List<LectureEntity> retrieveLecture(final String teacherId){
         return lectureRepository.findByTeacher_id(teacherId);}

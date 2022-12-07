@@ -43,6 +43,7 @@ public class LectureController {
 
 
 
+
     @Secured("ROLE_TEACHER")
     //과외 생성 -> 토큰 반환
     @PostMapping
@@ -106,7 +107,6 @@ public class LectureController {
     //조회(검색)
     @GetMapping
     public  ResponseEntity<?> retrieveLectureList(@AuthenticationPrincipal String userId){
-        //String temporaryTeacherId = "temp-Teacher"; //임시로 선생님 아이디 생성
 
         //(1) 서비스 메서드의 retrive 메서드를 이용해 리스트를 가져옴
         List<LectureEntity> entities1 = lectureService.retrieveLecture(userId);
@@ -116,6 +116,20 @@ public class LectureController {
 
         //(6) 변환된 LectureDTO 리스트를 이용해 ResponseDTO 초기화
         ResponseDTO<LectureDTO> response = ResponseDTO.<LectureDTO>builder().data(dtos1).build();
+        return  ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/lectureTitle")
+    public  ResponseEntity<?> retrieveLectureTitle(@AuthenticationPrincipal String userId){
+
+
+        List<String> lectureTitles = lectureService.getLectureTitle(userId);
+
+        //(2) 자바 스트림을 이용해 리턴된 엔티티 리스트를 LectureDTO로 변환
+        List<String> dtos = lectureTitles.stream().map(String::new).collect(Collectors.toList());
+
+        //(6) 변환된 LectureDTO 리스트를 이용해 ResponseDTO 초기화
+        ResponseDTO<String> response = ResponseDTO.<String>builder().data(dtos).build();
         return  ResponseEntity.ok().body(response);
     }
 
