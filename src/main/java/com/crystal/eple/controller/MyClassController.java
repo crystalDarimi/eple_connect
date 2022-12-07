@@ -3,7 +3,6 @@ package com.crystal.eple.controller;
 import com.crystal.eple.dto.request.MessageDto;
 import com.crystal.eple.dto.request.MyClass.ChangeMyClassRequestDto;
 import com.crystal.eple.dto.request.MyClass.DeleteMyclassRequest;
-import com.crystal.eple.dto.request.MyClass.GetMyclassRequestDto;
 import com.crystal.eple.dto.response.MyClassResponseDto;
 import com.crystal.eple.dto.response.PageResponseDto;
 import com.crystal.eple.service.MyClassService;
