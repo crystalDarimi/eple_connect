@@ -3,7 +3,9 @@ package com.crystal.eple.service;
 
 import com.crystal.eple.config.SecurityUtil;
 import com.crystal.eple.domain.entity.MyClassEntity;
+import com.crystal.eple.domain.entity.Role;
 import com.crystal.eple.domain.entity.UserEntity;
+import com.crystal.eple.domain.repository.LectureRepository;
 import com.crystal.eple.domain.repository.MyClassRepository;
 import com.crystal.eple.domain.repository.UserRepository;
 import com.crystal.eple.dto.response.MyClassResponseDto;
@@ -13,8 +15,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,26 +28,23 @@ public class MyClassService {
     private final MyClassRepository myClassRepository;
     private final UserRepository userRepository;
 
-    public List<PageResponseDto> allMyclass() {
+    private final LectureRepository lectureRepository;
+
+    public List<PageResponseDto> allMyclass() { // 나와 학생만 보게
         //List<MyClassEntity> myClassEntities = myClassRepository.findAll();
-        return myClassRepository.findAllDesc()
-                .stream()
-                .map(PageResponseDto::of)
-                .collect(Collectors.toList());
-    }
+        UserEntity user = isMemberCurrent();
 
-    public MyClassResponseDto oneArticle(Long id) {
-        MyClassEntity myClassEntity = myClassRepository.findById(id).orElseThrow(() -> new RuntimeException("글이 없습니다."));
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getPrincipal() == "anonymousUser") {
-            return MyClassResponseDto.of(myClassEntity, false);
-        } else {
-            UserEntity member = userRepository.findById((authentication.getName())).orElseThrow();
-            boolean result = myClassEntity.getUser().equals(member);
-            return MyClassResponseDto.of(myClassEntity, result);
-        }
+        if(user.getRole().equals(Role.TEACHER)) {
+            return myClassRepository.findMyClass(user)
+                    .stream()
+                    .map(PageResponseDto::of)
+                    .collect(Collectors.toList());
+        }else
+            return myClassRepository.findStudentClass(lectureRepository.findByTeacher_myclass(user))
+                    .stream()
+                    .map(PageResponseDto::of)
+                    .collect(Collectors.toList());
     }
-
 
 
     @Transactional
@@ -61,8 +62,8 @@ public class MyClassService {
 
     @Transactional
     public void deleteMyclass(Long id) {
-        MyClassEntity myClassEntity = authorizationArticleWriter(id);
-        myClassRepository.delete(myClassEntity);
+        MyClassEntity myClassEntity = authorizationArticleWriter(id); // 권한있는 사람만 볼수 있게~
+        myClassRepository.deleteById(myClassEntity.getId());
     }
 
     public UserEntity isMemberCurrent() {
@@ -71,13 +72,11 @@ public class MyClassService {
     }
 
     public MyClassEntity authorizationArticleWriter(Long id) {
-        UserEntity member = isMemberCurrent();
+        UserEntity user = isMemberCurrent();
         MyClassEntity myClassEntity = myClassRepository.findById(id).orElseThrow(() -> new RuntimeException("글이 없습니다."));
-        if (!myClassEntity.getUser().equals(member)) {
+        if (!myClassEntity.getUser().equals(user)) {
             throw new RuntimeException("로그인한 유저와 작성 유저가 같지 않습니다.");
         }
         return myClassEntity;
     }
-
-
 }

@@ -1,6 +1,7 @@
 package com.crystal.eple.domain.repository;
 
 import com.crystal.eple.domain.entity.LectureEntity;
+import com.crystal.eple.domain.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -25,6 +26,9 @@ public interface LectureRepository extends JpaRepository<LectureEntity,Long> {
 
    @Query("select l from LectureEntity l where l.teacherId = ?1")
    List<LectureEntity> findByTeacher_id(String teacher_id);
+
+    @Query("select l from LectureEntity l where l.teacherId = ?1")
+    UserEntity findByTeacher_myclass(UserEntity user);
 
 
 

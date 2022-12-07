@@ -27,8 +27,9 @@ public class MyClassEntity extends BaseTimeEntity{
     private String homework;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user")
     private UserEntity user;
+
 
     @Builder
     public MyClassEntity(Long id, String title, String content, String homework, UserEntity user){
@@ -37,7 +38,6 @@ public class MyClassEntity extends BaseTimeEntity{
         this.content= content;
         this.homework = homework;
         this.user = user;
-
     }
 
     public static MyClassEntity createMyclass (String title, String content, String homework, UserEntity user) {
@@ -95,4 +95,6 @@ public class MyClassEntity extends BaseTimeEntity{
     public void setUser(UserEntity user) {
         this.user = user;
     }
+
+    public String getClassUserId(){return user.getId();}
 }
