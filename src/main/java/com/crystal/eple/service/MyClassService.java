@@ -2,6 +2,7 @@ package com.crystal.eple.service;
 
 
 import com.crystal.eple.config.SecurityUtil;
+import com.crystal.eple.domain.entity.LectureEntity;
 import com.crystal.eple.domain.entity.MyClassEntity;
 import com.crystal.eple.domain.entity.Role;
 import com.crystal.eple.domain.entity.UserEntity;
@@ -39,11 +40,15 @@ public class MyClassService {
                     .stream()
                     .map(PageResponseDto::of)
                     .collect(Collectors.toList());
-        }else
-            return myClassRepository.findStudentClass(lectureRepository.findByTeacher_myclass(user))
+        }else {
+            LectureEntity l = lectureRepository.findStudentByTeacher(user.getId());
+            System.out.println(l.getTeacherId());
+            UserEntity teacher = userRepository.findById(l.getTeacherId()).orElseThrow();
+            return myClassRepository.findTeacherClass(teacher)
                     .stream()
                     .map(PageResponseDto::of)
                     .collect(Collectors.toList());
+        }
     }
 
 

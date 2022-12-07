@@ -27,11 +27,7 @@ public interface LectureRepository extends JpaRepository<LectureEntity,Long> {
    @Query("select l from LectureEntity l where l.teacherId = ?1")
    List<LectureEntity> findByTeacher_id(String teacher_id);
 
-    @Query("select l from LectureEntity l where l.teacherId = ?1")
-    UserEntity findByTeacher_myclass(UserEntity user);
-
-
-
-
+    @Query("select l from LectureEntity l where l.studentId = ?1")
+    LectureEntity findStudentByTeacher(String student_id); // 여기서 학생 엔티티를 받아서 lecture에서 선생님 id return
 
 }
