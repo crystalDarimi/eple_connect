@@ -2,6 +2,7 @@ package com.crystal.eple.controller;
 
 import com.crystal.eple.domain.entity.LectureEntity;
 import com.crystal.eple.domain.entity.ScheduleEntity;
+import com.crystal.eple.dto.request.LectureDTO;
 import com.crystal.eple.dto.request.ScheduleDTO;
 import com.crystal.eple.dto.response.ResponseDTO;
 import com.crystal.eple.service.LectureService;
@@ -9,8 +10,11 @@ import com.crystal.eple.service.ScheduleServiceImple;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,20 +33,15 @@ public class ScheduleController {
     }
 
     //일정 생성
+    @Secured("ROLE_TEACHER")
     @PostMapping
     public ResponseEntity<?> createSchedule(@RequestBody ScheduleDTO scheduleDTO){
         try{
 
-            String temporaryLectureTitle = "나수정 영어";
             ScheduleEntity scheduleEntity = ScheduleDTO.toScheduleEntity(scheduleDTO);
             scheduleEntity.setLectureEntity(null);
 
-           List<ScheduleEntity> entities = scheduleService.createSchedule(scheduleEntity,temporaryLectureTitle);
-
-
-            //ModelMapper modelMapper = new ModelMapper();
-           // ScheduleDTO dto = modelMapper.map(getEntitiy,ScheduleDTO.class);
-
+           List<ScheduleEntity> entities = scheduleService.createSchedule(scheduleEntity,scheduleDTO.getLectureTitle());
 
 
             List<ScheduleDTO> dtos = entities.stream().map(ScheduleDTO::new).collect(Collectors.toList());
@@ -96,8 +95,15 @@ public class ScheduleController {
 
     //검색(과외로 모든 수업 조회하기)
     @GetMapping
-    public  ResponseEntity<?> retrieveScheduleList(){
+
+    public  ResponseEntity<?> retrieveScheduleList(@AuthenticationPrincipal String userId){
         String temporaryLectureTitle = "나수정 영어";
+        List<LectureEntity> lectureEntities = lectureService.retrieveLecture(userId);
+        List<ScheduleEntity> scheduleEntities = new ArrayList<>();
+        for (LectureEntity lectureEntity : lectureEntities){
+            lectureEntity = lectureService.retrieveLectureByTitle(lectureEntity.getLectureTitle());
+
+        }
         LectureEntity lectureEntity = lectureService.retrieveLectureByTitle(temporaryLectureTitle);
 
         //(1) 서비스 메서드의 retrive 메서드를 이용해 리스트를 가져옴;
@@ -113,6 +119,7 @@ public class ScheduleController {
 
 
     //수정
+    @Secured("ROLE_TEACHER")
     @PutMapping
     public ResponseEntity<?> updateSchedule (@RequestBody ScheduleDTO scheduleDTO){
         int tempScheduleId = 2;
@@ -126,6 +133,7 @@ public class ScheduleController {
 
 
     //삭제
+    @Secured("ROLE_TEACHER")
     @DeleteMapping
     public ResponseEntity<?> deleteSchedule(@RequestBody ScheduleDTO scheduleDTO){
         try{

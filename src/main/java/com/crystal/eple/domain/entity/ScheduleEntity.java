@@ -1,10 +1,13 @@
 package com.crystal.eple.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 
@@ -21,13 +24,21 @@ public class ScheduleEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long scheduleId;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    @Column(name = "start")
+    private LocalDateTime start;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    @Column(name = "end")
+    private LocalDateTime end;
+
+    @Column(name="calendar_Id")
+    Long calendarId;
+
     @Column(name="date")
     LocalDate date;
-    @Column(name="start_time")
-    LocalTime startTime;
-
-    @Column(name="end_time")
-    LocalTime endTime;
 
 
     //다대일 ( 하나의 과외에 여러 수업)
@@ -38,10 +49,10 @@ public class ScheduleEntity {
     private LectureEntity lectureEntity;
 
     @Builder
-    public  ScheduleEntity ( LocalDate date, LocalTime startTime, LocalTime endTime, LectureEntity lectureEntity){
+    public  ScheduleEntity ( LocalDate date, LocalDateTime start, LocalDateTime end, LectureEntity lectureEntity){
         this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.start = start;
+        this.end = end;
         this.lectureEntity = lectureEntity;
         this.lectureEntity.getScheduleEntities().add(this);
 

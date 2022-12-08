@@ -2,9 +2,11 @@ package com.crystal.eple.dto.response;
 
 import com.crystal.eple.domain.entity.LectureEntity;
 import com.crystal.eple.domain.entity.ScheduleEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -19,9 +21,11 @@ public class ScheduleRpDTO {
 
     private LocalDate date;
 
-    private LocalTime startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime start;
 
-    private LocalTime  endTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime end;
 
     private LectureEntity lectureEntity;
 
@@ -30,8 +34,8 @@ public class ScheduleRpDTO {
   public ScheduleRpDTO(final ScheduleEntity scheduleEntity){
     this.scheduleId = scheduleEntity.getScheduleId();
     this.date= scheduleEntity.getDate();
-    this.startTime = scheduleEntity.getStartTime();
-    this.endTime = scheduleEntity.getEndTime();
+    this.start = scheduleEntity.getStart();
+    this.end = scheduleEntity.getEnd();
     this.lectureEntity = scheduleEntity.getLectureEntity();
   }
 }
