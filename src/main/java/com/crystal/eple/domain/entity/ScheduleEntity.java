@@ -40,7 +40,6 @@ public class ScheduleEntity {
     @Column(name="date")
     LocalDate date;
 
-
     //다대일 ( 하나의 과외에 여러 수업)
     @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)

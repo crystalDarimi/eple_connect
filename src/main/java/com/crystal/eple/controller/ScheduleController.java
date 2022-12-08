@@ -2,6 +2,7 @@ package com.crystal.eple.controller;
 
 import com.crystal.eple.domain.entity.LectureEntity;
 import com.crystal.eple.domain.entity.ScheduleEntity;
+import com.crystal.eple.domain.entity.UserEntity;
 import com.crystal.eple.dto.request.LectureDTO;
 import com.crystal.eple.dto.request.ScheduleDTO;
 import com.crystal.eple.dto.response.ResponseDTO;
@@ -38,6 +39,7 @@ public class ScheduleController {
     public ResponseEntity<?> createSchedule(@RequestBody ScheduleDTO scheduleDTO){
         try{
 
+
             ScheduleEntity scheduleEntity = ScheduleDTO.toScheduleEntity(scheduleDTO);
             scheduleEntity.setLectureEntity(null);
 
@@ -64,22 +66,30 @@ public class ScheduleController {
     public ResponseEntity<?> creatingSchedule(@RequestBody ScheduleDTO scheduleDTO){
         try{
 
-            String temporaryLectureTitle = "나수정 영어";
+
             ScheduleEntity scheduleEntity = ScheduleDTO.toScheduleEntity(scheduleDTO);
             scheduleEntity.setLectureEntity(null);
 
-            ScheduleEntity entities = scheduleService.creatingSchedule(scheduleEntity,temporaryLectureTitle);
+            ScheduleEntity entity = scheduleService.creatingSchedule(scheduleEntity,scheduleDTO.getLectureTitle());
+
+            ScheduleDTO responseDTO = ScheduleDTO.builder()
+                    .scheduleId(entity.getScheduleId())
+                    .start(entity.getStart())
+                    .end(entity.getEnd())
+                    .calendarId(entity.getCalendarId())
+                    .lectureTitle(entity.getLectureEntity().getLectureTitle())
+                    .build();
 
 
-            ModelMapper modelMapper = new ModelMapper();
-             ScheduleDTO dtos = modelMapper.map(entities,ScheduleDTO.class);
+            //ModelMapper modelMapper = new ModelMapper();
+             //ScheduleDTO dtos = modelMapper.map(entities,ScheduleDTO.class);
 
 
 
            // ScheduleDTO dtos = entities.stream().map(ScheduleDTO::new).collect(Collectors.toList());
-            ResponseDTO<ScheduleDTO> response = ResponseDTO.<ScheduleDTO>builder().data2(dtos).build();
+            //ResponseDTO<ScheduleDTO> response = ResponseDTO.<ScheduleDTO>builder().data2(dtos).build();
 
-            return  ResponseEntity.ok().body(response);
+            return  ResponseEntity.ok().body(responseDTO);
 
         }catch (Exception e){
             //8 혹시 예외가 나는 경우 dto 대신 메세지 넣어서 리턴
@@ -95,10 +105,16 @@ public class ScheduleController {
 
     //검색(과외로 모든 수업 조회하기)
     @GetMapping
+    public  ResponseEntity<?> retrieveAllScheduleList(@AuthenticationPrincipal String userId){
 
-    public  ResponseEntity<?> retrieveScheduleList(@AuthenticationPrincipal String userId){
-        String temporaryLectureTitle = "나수정 영어";
+
+        try {
+            List<ScheduleEntity> scheduleEntities = scheduleService.findAllByCalendar(userId);
+
+        /*
         List<LectureEntity> lectureEntities = lectureService.retrieveLecture(userId);
+
+
         List<ScheduleEntity> scheduleEntities = new ArrayList<>();
         for (LectureEntity lectureEntity : lectureEntities){
             lectureEntity = lectureService.retrieveLectureByTitle(lectureEntity.getLectureTitle());
@@ -106,6 +122,13 @@ public class ScheduleController {
         }
         LectureEntity lectureEntity = lectureService.retrieveLectureByTitle(temporaryLectureTitle);
 
+         */
+
+            List<ScheduleDTO> dtos = scheduleEntities.stream().map(ScheduleDTO::new).collect(Collectors.toList());
+            ResponseDTO<ScheduleDTO> response = ResponseDTO.<ScheduleDTO>builder().data(dtos).build();
+
+            return ResponseEntity.ok().body(response);
+        /*
         //(1) 서비스 메서드의 retrive 메서드를 이용해 리스트를 가져옴;
         List<ScheduleEntity> entities = scheduleService.findAllByLecture(lectureEntity);
 
@@ -115,6 +138,17 @@ public class ScheduleController {
         //(6) 변환된 LectureDTO 리스트를 이용해 ResponseDTO 초기화
         ResponseDTO<ScheduleDTO> response = ResponseDTO.<ScheduleDTO>builder().data(dtos).build();
         return  ResponseEntity.ok().body(response);
+
+         */
+        }catch (Exception e){
+            //8 혹시 예외가 나는 경우 dto 대신 메세지 넣어서 리턴
+
+            String error = e.getMessage();
+            ResponseDTO<ScheduleDTO> response = ResponseDTO.<ScheduleDTO>builder().error(error).build();
+            return ResponseEntity.badRequest().body(response);
+
+            // return new ResponseEntity<ScheduleDTO>(HttpStatus.UNAUTHORIZED);
+        }
     }
 
 
