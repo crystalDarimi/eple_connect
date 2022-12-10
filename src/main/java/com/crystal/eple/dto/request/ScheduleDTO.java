@@ -46,6 +46,8 @@ public class ScheduleDTO {
        this.end = scheduleEntity.getEnd();
        this.lectureEntity = scheduleEntity.getLectureEntity();
        this.calendarId = scheduleEntity.getCalendarId();
+       this.cycle = scheduleEntity.getLectureEntity().getCycle();
+       this.presentCycle = scheduleEntity.getLectureEntity().getPresentCycle();
     }
 
     public static ScheduleEntity toScheduleEntity(final ScheduleDTO scheduleDTO){

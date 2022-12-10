@@ -48,12 +48,14 @@ public class ScheduleEntity {
     private LectureEntity lectureEntity;
 
     @Builder
-    public  ScheduleEntity ( LocalDate date, LocalDateTime start, LocalDateTime end, LectureEntity lectureEntity){
+    public  ScheduleEntity ( LocalDate date, LocalDateTime start, LocalDateTime end, LectureEntity lectureEntity, Long calendarId){
         this.date = date;
         this.start = start;
         this.end = end;
+
         this.lectureEntity = lectureEntity;
         this.lectureEntity.getScheduleEntities().add(this);
+        this.calendarId = lectureEntity.getCalendarEntity().getCalendarId();
 
     }
 

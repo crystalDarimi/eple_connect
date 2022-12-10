@@ -3,6 +3,7 @@ package com.crystal.eple.controller;
 import com.crystal.eple.domain.entity.LectureEntity;
 import com.crystal.eple.domain.entity.ScheduleEntity;
 import com.crystal.eple.domain.entity.UserEntity;
+import com.crystal.eple.domain.repository.ScheduleRepository;
 import com.crystal.eple.dto.request.LectureDTO;
 import com.crystal.eple.dto.request.ScheduleDTO;
 import com.crystal.eple.dto.response.ResponseDTO;
@@ -46,13 +47,14 @@ public class ScheduleController {
            List<ScheduleEntity> entities = scheduleService.createSchedule(scheduleEntity,scheduleDTO.getLectureTitle());
 
 
+
             List<ScheduleDTO> dtos = entities.stream().map(ScheduleDTO::new).collect(Collectors.toList());
             ResponseDTO<ScheduleDTO> response = ResponseDTO.<ScheduleDTO>builder().data(dtos).build();
 
             return  ResponseEntity.ok().body(response);
 
         }catch (Exception e){
-            //8 혹시 예외가 나는 경우 dto 대신 메세지 넣어서 리턴
+            // 혹시 예외가 나는 경우 dto 대신 메세지 넣어서 리턴
 
             String error = e.getMessage();
             ResponseDTO<ScheduleDTO> response = ResponseDTO.<ScheduleDTO>builder().error(error).build();
@@ -156,9 +158,9 @@ public class ScheduleController {
     @Secured("ROLE_TEACHER")
     @PutMapping
     public ResponseEntity<?> updateSchedule (@RequestBody ScheduleDTO scheduleDTO){
-        int tempScheduleId = 2;
+
         ScheduleEntity scheduleEntity = ScheduleDTO.toScheduleEntity(scheduleDTO);
-        scheduleEntity.setScheduleId((long) tempScheduleId);
+
         ScheduleEntity newEntity = scheduleService.updateSchedule(scheduleEntity);
         ScheduleDTO newDTO = new ScheduleDTO(newEntity);
         ResponseDTO responseDTO = ResponseDTO.<ScheduleDTO>builder().data2(newDTO).build();
@@ -171,9 +173,8 @@ public class ScheduleController {
     @DeleteMapping
     public ResponseEntity<?> deleteSchedule(@RequestBody ScheduleDTO scheduleDTO){
         try{
-            int tempScheduleId = 2;
             ScheduleEntity scheduleEntity = ScheduleDTO.toScheduleEntity(scheduleDTO);
-            scheduleEntity.setScheduleId((long) tempScheduleId);
+            scheduleEntity.setScheduleId(scheduleDTO.getScheduleId());
             scheduleService.deleteSchedule(scheduleEntity);
             String successMessage ="sucess for delete";
             ResponseDTO<ScheduleDTO> responseDTO = ResponseDTO.<ScheduleDTO>builder().message(successMessage).build();

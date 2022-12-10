@@ -48,7 +48,7 @@ public class LectureController {
     @PostMapping
     public ResponseEntity<?> createLecture(@AuthenticationPrincipal String userId,  @RequestBody LectureDTO lectureDTO){
         try{
-            //String temporaryTeacherId = "temp-Teacher"; //임시로 선생님 아이디 생성
+
             //(1) toEntity로 변환한다
             LectureEntity entity = LectureDTO.toLectureEntity(lectureDTO);
 

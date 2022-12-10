@@ -109,8 +109,9 @@ public class LectureService {
     public List <LectureEntity> delete(final LectureEntity entity){
         //(1) 유효 확인
         validate(entity);
+        LectureEntity deleteEntity = lectureRepository.findByLectureTitle(entity.getLectureTitle());
         try{
-            lectureRepository.delete(entity);
+            lectureRepository.delete(deleteEntity);
         }catch (Exception e){
             //Exception 발생시 id와 예외 로깅
             log.error("error deleting entity"+ entity.getLectureTitle());
